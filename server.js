@@ -868,7 +868,10 @@ function autoryzacja(req, res, next) {
   next();
 }
 
-const { mineflayer: mineflayerViewer } = require('prismarine-viewer');
+let mineflayerViewer = null;
+try {
+  mineflayerViewer = require('prismarine-viewer').mineflayer;
+} catch (e) {}
 
 let aktywnyPodglad = {
   slot: 0,
