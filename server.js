@@ -340,7 +340,7 @@ function polaczBota(slotObj) {
     version: konfig.mcWersja || false,
     auth: 'offline',
     hideErrors: true,
-    checkTimeoutInterval: 60000,
+    checkTimeoutInterval: 120000, // 120s tolerancji na chwilowe przycięcia domowego routera proxy
     viewDistance: 1, // Minimalny zasięg 1 chunk (16 kratek) — serwer nie wysyła graczy/mobów z daleka!
     chat: 'commandsOnly', // Blokuje zwykłe wiadomości czatu graczy już po stronie serwera
     colorsEnabled: false,
@@ -353,6 +353,10 @@ function polaczBota(slotObj) {
     opcje.connect = (client) => {
       polaczPrzezProxyUniwersalne(proxy, konfig.mcHost, Number(konfig.mcPort) || 25565, 15000)
         .then(socket => {
+          try {
+            socket.setKeepAlive(true, 15000);
+            socket.setNoDelay(true);
+          } catch (e) {}
           client.setSocket(socket);
           client.emit('connect');
         })
@@ -368,10 +372,15 @@ function polaczBota(slotObj) {
   let bot;
   try {
     bot = mineflayer.createBot(opcje);
-    bot._nieLadujSwiata = true; // Blokuje pobieranie kolejnych partii chunków (mapy świata) z serwera
-    // Działa również na czystym npm install w chmurze (np. Render.com) — odpina ładowanie chunków:
+    bot._nieLadujSwiata = true; // Blokuje rozpakowywanie mapy świata w RAM
+    // Działa również na czystym npm install w chmurze (np. Render.com):
     try {
       bot._client.removeAllListeners('chunk_batch_finished');
+      bot._client.on('chunk_batch_finished', () => {
+        try {
+          bot._client.write('chunk_batch_received', { chunksPerTick: 0.05 });
+        } catch (e) {}
+      });
       bot._client.removeAllListeners('map_chunk');
       bot._client.removeAllListeners('update_light');
     } catch (e) {}
@@ -822,39 +831,25 @@ function polaczPrzezProxyUniwersalne(proxy, celHost, celPort, timeoutMs = 10000)
     // W Proxy-Seller port 50100 to HTTP, a 50101 to natywne SOCKS5 (najlepsze dla Minecraft TCP)
     const sockPort = bazowyPort === 50100 ? 50101 : bazowyPort;
 
-    // Dla Proxy-Seller Residential (res.proxy-seller.com): równoległe szybkie zestawienie z węzłem mającym otwarty port 25565 (~260 ms)
-    if (String(proxy.host).includes('res.proxy-seller.com') || (bazowyPort >= 10000 && bazowyPort < 11000)) {
-      const uzywanePorty = new Set(konfig.proxyLista.map(p => Number(p.port)));
-      for (let proba = 0; proba < 10; proba++) {
-        const kandydaci = proba === 0 ? [sockPort] : [];
-        while (kandydaci.length < 6) {
-          const losowyPort = 10000 + Math.floor(Math.random() * 1000);
-          if (!uzywanePorty.has(losowyPort) && !kandydaci.includes(losowyPort)) {
-            kandydaci.push(losowyPort);
-          }
-        }
-        let wygrany = false;
-        try {
-          const wynik = await Promise.any(
-            kandydaci.map(async (pTest) => {
-              const sock = await sprobujSocks5(pTest, cel.host, cel.port);
-              if (wygrany) {
-                sock.destroy();
-                throw new Error('duplicate');
-              }
-              wygrany = true;
-              return { port: pTest, sock };
-            })
-          );
-          return wynik.sock;
-        } catch {}
-      }
-    }
-
+    // 1. Zawsze najpierw łączymy bezpośrednio przez przypisany port tego konkretnego Proxy (np. 10000..10009),
+    //    żeby każdy port trzymał swoje własne dedykowane IP i boty nie wpadały na wspólny port!
     try {
       return await sprobujSocks5(sockPort, cel.host, cel.port);
     } catch (e1) {
-      return await sprobujHttpConnect(bazowyPort, cel.host, cel.port);
+      try {
+        return await sprobujHttpConnect(bazowyPort, cel.host, cel.port);
+      } catch (e2) {
+        // 2. Dopiero jeśli przypisany router domowy akurat nie odpowiada, sprawdź zapasowy port z puli:
+        if (String(proxy.host).includes('res.proxy-seller.com') || (bazowyPort >= 10000 && bazowyPort < 11000)) {
+          for (const zapasPort of konfig.proxyLista.map(p => Number(p.port))) {
+            if (zapasPort === sockPort) continue;
+            try {
+              return await sprobujSocks5(zapasPort, cel.host, cel.port);
+            } catch {}
+          }
+        }
+        throw e1;
+      }
     }
   })();
 }
