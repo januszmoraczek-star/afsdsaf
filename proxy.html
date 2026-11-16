@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proxy &amp; Auto-Nagrody (100 Botów · Cykl 5h 10min)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: #090b10; color: #e6edf7;
+      font-family: 'Archivo', system-ui, sans-serif;
+      font-size: 14px; line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+      overflow-x: hidden;
+    }
+    @keyframes puls { 0%, 100% { opacity: 1 } 50% { opacity: .28 } }
+    input, select, button, textarea {
+      font-family: 'Archivo', system-ui, sans-serif;
+      border-radius: 11px;
+    }
+    button { cursor: pointer; transition: opacity .15s, transform .08s, border-color .15s; }
+    button:active { transform: scale(0.98); }
+    button:disabled { cursor: not-allowed; opacity: 0.45 !important; }
+    input:focus-visible, select:focus-visible, button:focus-visible, textarea:focus-visible {
+      outline: 2px solid #ff9f2e; outline-offset: 2px;
+    }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .ukryte { display: none !important; }
+    .om-scroll::-webkit-scrollbar { width: 9px; height: 9px; }
+    .om-scroll::-webkit-scrollbar-track { background: #090b10; }
+    .om-scroll::-webkit-scrollbar-thumb { background: #263042; border-radius: 5px; }
+    .gui-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 36px);
+      gap: 4px;
+      background: #141821;
+      padding: 10px;
+      border-radius: 14px;
+      border: 2px solid #263042;
+      width: fit-content;
+    }
+    .gui-slot {
+      width: 36px; height: 36px;
+      border-radius: 6px;
+      background: #1d2330;
+      border: 1px solid #2f394d;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: #6c7a91;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+    }
+    .gui-slot:hover { border-color: #ff9f2e; color: #fff; }
+    .gui-slot.pink-glass { background: rgba(236, 72, 153, 0.16); border-color: rgba(236, 72, 153, 0.35); }
+    .gui-slot.gray-glass { background: rgba(148, 163, 184, 0.12); border-color: rgba(148, 163, 184, 0.25); }
+    .gui-slot.left-item { background: rgba(56, 189, 248, 0.18); border-color: #38bdf8; color: #bae6fd; font-weight: 800; }
+    .gui-slot.right-key {
+      background: rgba(255, 159, 46, 0.28);
+      border: 2px solid #ff9f2e;
+      color: #ffd188;
+      font-weight: 800;
+      box-shadow: 0 0 14px rgba(255, 159, 46, 0.45);
+    }
+    .gui-slot.wybrany-slot {
+      outline: 2px solid #35d07f;
+      outline-offset: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<div style="min-height:100vh;background:radial-gradient(950px 400px at 12% -10%,rgba(255,159,46,.15),transparent 65%),radial-gradient(800px 350px at 95% 0%,rgba(53,208,127,.09),transparent 60%),#090b10;">
+
+  <!-- PASEK NAWIGACJI MIĘDZY STRONAMI -->
+  <div style="background:#0d1118;border-bottom:1px solid #1b2230;padding:10px 30px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <a href="/proxy" style="text-decoration:none;background:#ff9f2e;color:#090b10;padding:7px 16px;border-radius:999px;font-weight:800;font-size:12px;letter-spacing:.03em">🔑 Strona Proxy &amp; Auto-Nagrody (100 Botów · 5h 10min)</a>
+      <a href="/" style="text-decoration:none;background:#151b26;border:1px solid #252f42;color:#9aa7bd;padding:7px 16px;border-radius:999px;font-weight:700;font-size:12px">🎃 Panel Główny (Farma Dyń &amp; Flota)</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span id="naglowekSerwerInfo" class="mono" style="font-size:12px;color:#8b98ad">ładowanie...</span>
+      <button type="button" onclick="wyloguj()" style="background:none;border:1px solid #252f42;border-radius:999px;color:#8b98ad;padding:5px 12px;font-size:11px">Wyloguj</button>
+    </div>
+  </div>
+
+  <!-- NAGŁÓWEK GŁÓWNY I STEROWANIE CYKLEM 100 BOTÓW -->
+  <div style="padding:22px 30px 14px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="background:linear-gradient(135deg,#ff9f2e,#ff6b2b);color:#090b10;width:46px;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800">🔑</div>
+      <div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-.02em">Proxy SOCKS5 &amp; Auto-Odbieranie <code class="mono" style="color:#ff9f2e">/darmowenagrody</code></div>
+        <div style="font-size:12px;color:#8b98ad">
+          Schemat: <b>1. Połączenie z Proxy</b> → <b>2. Logowanie</b> → <b>3. Wejście na tryb</b> → <b>4. <code class="mono">/darmowenagrody</code></b> → <b>5. Klik w klucz po prawej</b> → <b>6. Wyjście (100 botów po kolei co 5h 10min)</b>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <button id="btnStartCyklu" type="button" onclick="startCyklu()" style="background:#35d07f;border:2px solid #35d07f;color:#090b10;font-weight:800;padding:11px 20px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;box-shadow:0 4px 18px rgba(53,208,127,.25)">▶ Start 100 Botów (Cykl co 5h 10m)</button>
+      <button id="btnPauzaCyklu" type="button" onclick="pauzaCyklu()" style="background:#151b26;border:2px solid #ffc93c;color:#ffc93c;font-weight:800;padding:11px 16px;font-size:12px;text-transform:uppercase">⏸ Pauza</button>
+      <button id="btnStopCyklu" type="button" onclick="stopCyklu()" style="background:#151b26;border:2px solid #ff5c5c;color:#ff5c5c;font-weight:800;padding:11px 16px;font-size:12px;text-transform:uppercase">⏹ Stop</button>
+      <button type="button" onclick="testujBota(1)" style="background:#151b26;border:2px solid #5aa9ff;color:#5aa9ff;font-weight:800;padding:11px 16px;font-size:12px;text-transform:uppercase">🧪 Testuj 1 bota (#1)</button>
+    </div>
+  </div>
+
+  <!-- PASEK KOMUNIKATU I AKTUALNEGO KROKU -->
+  <div style="margin:0 30px 16px;padding:12px 18px;border-radius:14px;background:#10151f;border:1px solid #1e2738;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="kropkaCyklu" style="width:10px;height:10px;border-radius:999px;background:#5a6678;display:inline-block"></span>
+      <span style="font-size:12px;color:#8b98ad;font-weight:700">STATUS NA ŻYWO:</span>
+      <span id="tekstAktualnyKrok" class="mono" style="font-size:13px;font-weight:700;color:#ff9f2e">Gotowy do uruchomienia cyklu 100 botów</span>
+    </div>
+    <div id="poleKomunikatu" style="font-size:12px;font-weight:800"></div>
+  </div>
+
+  <!-- 4 KARTY STATYSTYK CYKLU -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;padding:0 30px 18px">
+    <!-- Karta 1: Postęp 100 botów -->
+    <div style="background:linear-gradient(155deg,#ff9f2e,#e87c15);color:#090b10;border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;text-transform:uppercase">
+        <span>Odebrane w tym cyklu</span>
+        <span id="badgeNrCyklu" style="background:rgba(9,11,16,.2);padding:2px 9px;border-radius:999px">Cykl #0</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:6px;line-height:.85">
+        <span id="statOdebrano" style="font-size:60px;font-weight:800;letter-spacing:-.05em">0</span>
+        <span id="statNaIle" style="font-size:24px;font-weight:700;opacity:.65">/100</span>
+      </div>
+      <div>
+        <div style="height:8px;border-radius:999px;background:rgba(9,11,16,.28);overflow:hidden;margin-bottom:6px">
+          <div id="pasekPostepuCyklu" style="height:100%;width:0%;background:#090b10;border-radius:999px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700">
+          <span id="statBledyCyklu">Błędy: 0</span>
+          <span id="statLacznieOdebrano">Łącznie kluczy: 0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Karta 2: Odliczanie 5h 10min -->
+    <div style="background:#0f141d;border:1px solid #1d2636;border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;gap:10px">
+      <div style="font-size:12px;font-weight:700;color:#8b98ad;display:flex;justify-content:space-between">
+        <span>⏰ Następny cykl (co 5h 10min)</span>
+        <span id="badgeAutoPowtarzaj" style="color:#35d07f;font-weight:800">AUTO ON</span>
+      </div>
+      <div id="zegarNastepnyCykl" class="mono" style="font-size:42px;font-weight:800;letter-spacing:-.03em;color:#35d07f;line-height:1">05:10:00</div>
+      <div id="opisNastepnyCykl" style="font-size:12px;color:#6c7a91">Po przejściu 100 botów odliczy 5h 10m i wejdzie ponownie</div>
+    </div>
+
+    <!-- Karta 3: Aktualnie działający bot -->
+    <div style="background:#0f141d;border:1px solid #1d2636;border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;gap:10px">
+      <div style="font-size:12px;font-weight:700;color:#8b98ad">🤖 Aktualny bot w kolejce</div>
+      <div id="statAktualnyBot" class="mono" style="font-size:26px;font-weight:800;color:#e6edf7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brak (oczekuje)</div>
+      <div id="statAktualnySlotInfo" style="font-size:12px;color:#ff9f2e;font-weight:700">Wchodzą pojedynczo (1 po drugim)</div>
+    </div>
+
+    <!-- Karta 4: Stan Proxy SOCKS5 -->
+    <div style="background:#0f141d;border:1px solid #1d2636;border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;gap:10px">
+      <div style="font-size:12px;font-weight:700;color:#8b98ad">🌐 Serwery Proxy SOCKS5</div>
+      <div style="display:flex;align-items:baseline;gap:8px">
+        <span id="statLiczbaProxy" style="font-size:48px;font-weight:800;line-height:.9;color:#ffc93c">0</span>
+        <span id="statDzokProxy" style="font-size:13px;color:#35d07f;font-weight:700"></span>
+      </div>
+      <div id="opisProxyRozklad" style="font-size:12px;color:#ffc93c;font-weight:700">Dodaj proxy poniżej, aby rozdzielić 100 kont</div>
+    </div>
+  </div>
+
+  <!-- SEKCJA 1: DEDYKOWANE ZARZĄDZANIE PROXY SOCKS5 -->
+  <div style="margin:0 30px 18px;border-radius:18px;background:#0f141d;border:1px solid #1d2636;overflow:hidden">
+    <div style="padding:15px 20px;border-bottom:1px solid #1b2230;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>
+        <span style="font-size:16px;font-weight:800;color:#e6edf7">🌐 Zarządzanie Proxy SOCKS5 (podłączanie botów do proxy)</span>
+        <span style="font-size:12px;color:#6c7a91;margin-left:10px">Formaty: <code class="mono" style="color:#9aa7bd">ip:port:user:haslo</code> · <code class="mono" style="color:#9aa7bd">user:haslo@ip:port</code> · <code class="mono" style="color:#9aa7bd">ip:port</code></span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="btnTestWszystkich" type="button" onclick="testujWszystkieProxy()" style="background:#171f2e;border:1px solid #28344b;color:#e6edf7;padding:7px 14px;font-size:12px;font-weight:700">⚡ Testuj wszystkie Proxy</button>
+        <button type="button" onclick="usunBledneProxy()" style="background:#171f2e;border:1px solid #28344b;color:#ff5c5c;padding:7px 14px;font-size:12px;font-weight:700">🗑 Usuń niedziałające</button>
+        <button type="button" onclick="wyczyscProxy()" style="background:#171f2e;border:1px solid #28344b;color:#8b98ad;padding:7px 14px;font-size:12px;font-weight:700">Wyczyść listę</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;padding:18px 20px;border-bottom:1px solid #1b2230;background:#0b0f17">
+      <!-- Dodawanie Proxy -->
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:12px;font-weight:700;color:#9aa7bd">Wklej listę Proxy SOCKS5 (po jednym w linii):</div>
+        <textarea id="poleNoweProxy" rows="4" class="mono" placeholder="91.149.251.49:12324:uzytkownik:haslo&#10;185.22.11.4:1080:user2:pass2" style="width:100%;background:#111722;border:2px solid #232d40;color:#e6edf7;padding:10px 12px;font-size:12px;resize:vertical"></textarea>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button type="button" onclick="dodajProxy()" style="background:#ff9f2e;border:2px solid #ff9f2e;color:#090b10;font-weight:800;padding:8px 18px;font-size:12px;text-transform:uppercase">+ Dodaj Proxy do puli</button>
+          <span style="font-size:11px;color:#6c7a91">Boty #1–#100 automatycznie rozłożą się po kolei na dodane proxy.</span>
+        </div>
+      </div>
+
+      <!-- Przypisywanie Proxy do zakresów kont -->
+      <div style="display:flex;flex-direction:column;justify-content:space-between;gap:12px;background:#101520;padding:14px 16px;border-radius:14px;border:1px solid #1c2436">
+        <div>
+          <div style="font-size:13px;font-weight:800;margin-bottom:6px">Przypisanie Proxy dla 100 botów</div>
+          <div style="font-size:12px;color:#8b98ad;margin-bottom:12px">
+            Domyślnie każde konto otrzymuje proxy w trybie <b>Auto (równo po kolei)</b>. Możesz też przypisać wybrany zakres botów do konkretnego proxy:
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="font-size:11px;color:#6c7a91;text-transform:uppercase">Konta od</span>
+            <input id="przOd" type="number" value="1" min="1" max="200" class="mono" style="width:62px;background:#151c28;border:1px solid #28344b;color:#e6edf7;padding:6px;text-align:center">
+            <span style="font-size:11px;color:#6c7a91;text-transform:uppercase">do</span>
+            <input id="przDo" type="number" value="100" min="1" max="200" class="mono" style="width:62px;background:#151c28;border:1px solid #28344b;color:#e6edf7;padding:6px;text-align:center">
+            <span style="color:#6c7a91">→</span>
+            <select id="przNrProxy" style="background:#151c28;border:1px solid #28344b;color:#e6edf7;padding:6px 10px;font-size:12px">
+              <option value="0">Auto (równo na wszystkie proxy)</option>
+            </select>
+            <button type="button" onclick="przypiszProxy()" style="background:#ff9f2e;border:none;color:#090b10;font-weight:800;padding:7px 14px;font-size:12px">Przypisz</button>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid #1b2230;flex-wrap:wrap;gap:8px">
+          <span style="font-size:12px;color:#8b98ad">🎲 Wymień nicki botów na świeże z <code class="mono">nicki.txt</code>:</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <input id="losOd" type="number" value="1" min="1" max="200" class="mono" style="width:54px;background:#151c28;border:1px solid #28344b;color:#e6edf7;padding:5px;text-align:center;font-size:12px">
+            <span style="color:#6c7a91">–</span>
+            <input id="losDo" type="number" value="100" min="1" max="200" class="mono" style="width:54px;background:#151c28;border:1px solid #28344b;color:#e6edf7;padding:5px;text-align:center;font-size:12px">
+            <button type="button" onclick="przelosujNicki()" style="background:none;border:1px solid #ffc93c;color:#ffc93c;font-weight:700;padding:5px 12px;font-size:11px">Przelosuj nicki</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista kart Proxy -->
+    <div id="kontenerKartProxy" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:10px;padding:16px 20px"></div>
+  </div>
+
+  <!-- SEKCJA 2: USTAWIENIA TRYBU, /DARMOWENAGRODY, KLUCZA PO PRAWEJ I HARMONOGRAMU 5H 10MIN -->
+  <div style="margin:0 30px 18px;border-radius:18px;background:#0f141d;border:1px solid #1d2636;padding:18px 20px">
+    <div style="font-size:16px;font-weight:800;margin-bottom:14px;color:#ff9f2e">⚙️ Konfiguracja wejścia na tryb, <code class="mono">/darmowenagrody</code> i cyklu 5h 10min</div>
+
+    <div style="display:grid;grid-template-columns:1fr auto;gap:22px;align-items:start">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:12px">
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Serwer Minecraft (IP / Domena)</div>
+          <input id="cfgHost" class="mono" placeholder="anarchia.gg" style="width:100%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px 10px;font-size:13px">
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Port i Wersja MC</div>
+          <div style="display:flex;gap:6px">
+            <input id="cfgPort" type="number" class="mono" placeholder="25565" style="width:50%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px;font-size:13px">
+            <input id="cfgWersja" class="mono" placeholder="1.20.1" style="width:50%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px;font-size:13px">
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Hasło botów (/login i /register)</div>
+          <input id="cfgHaslo" class="mono" placeholder="HasloBotow123!" style="width:100%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px 10px;font-size:13px">
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Komenda wejścia na tryb (po loginie)</div>
+          <input id="cfgKomendaTrybu" class="mono" placeholder="np. /anarchia lub zostaw puste" style="width:100%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px 10px;font-size:13px">
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Komenda na czacie po wejściu na tryb</div>
+          <input id="cfgKomendaNagrody" class="mono" value="/darmowenagrody" style="width:100%;background:#121824;border:1px solid #ff9f2e;color:#ffd188;padding:8px 10px;font-size:13px;font-weight:700">
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Wybór klucza w GUI <code class="mono">/darmowenagrody</code></div>
+          <div style="display:flex;gap:6px">
+            <select id="cfgTrybSlotu" onchange="aktualizujPodgladGui()" style="width:65%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px;font-size:12px">
+              <option value="auto">Auto (klucz po prawej / #23)</option>
+              <option value="reczny">Ręczny numer slotu</option>
+            </select>
+            <input id="cfgSlotKlucza" type="number" min="0" max="53" value="23" oninput="aktualizujPodgladGui()" class="mono" style="width:35%;background:#121824;border:1px solid #28344b;color:#ff9f2e;padding:8px;font-size:13px;font-weight:800;text-align:center">
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Liczba botów po kolei w cyklu</div>
+          <input id="cfgLiczbaBotow" type="number" min="1" max="200" value="100" class="mono" style="width:100%;background:#121824;border:1px solid #28344b;color:#35d07f;padding:8px 10px;font-size:14px;font-weight:800">
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Powtarzaj cykl co (Godziny : Minuty)</div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input id="cfgInterwalH" type="number" min="0" max="48" value="5" class="mono" style="width:45%;background:#121824;border:1px solid #35d07f;color:#35d07f;padding:8px;font-size:13px;font-weight:800;text-align:center">
+            <span style="font-size:12px;color:#8b98ad">h</span>
+            <input id="cfgInterwalM" type="number" min="0" max="59" value="10" class="mono" style="width:45%;background:#121824;border:1px solid #35d07f;color:#35d07f;padding:8px;font-size:13px;font-weight:800;text-align:center">
+            <span style="font-size:12px;color:#8b98ad">min</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Czasy (po loginie / na trybie / odstęp) [s]</div>
+          <div style="display:flex;gap:6px">
+            <input id="cfgCzasLogin" type="number" min="1" max="30" value="3" title="Sekundy po /login" class="mono" style="width:33%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px 4px;text-align:center;font-size:12px">
+            <input id="cfgCzasTryb" type="number" min="1" max="30" value="4" title="Sekundy po wejściu na tryb przed /darmowenagrody" class="mono" style="width:33%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px 4px;text-align:center;font-size:12px">
+            <input id="cfgOdstepBotow" type="number" min="1" max="120" value="4" title="Sekundy odstępu między kolejnymi botami" class="mono" style="width:34%;background:#121824;border:1px solid #28344b;color:#e6edf7;padding:8px 4px;text-align:center;font-size:12px">
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Opcjonalnie: Klik w kompas w lobby (slot GUI)</div>
+          <input id="cfgLobbySlot" type="number" min="-1" max="53" value="-1" placeholder="-1 = wyłączone" class="mono" style="width:100%;background:#121824;border:1px solid #28344b;color:#8b98ad;padding:8px 10px;font-size:12px">
+        </div>
+        <div style="display:flex;flex-direction:column;justify-content:center;gap:6px;padding-top:14px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
+            <input id="cfgAutoPowtarzaj" type="checkbox" checked>
+            <span>Automatycznie wbijaj ponownie co 5h 10min</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
+            <input id="cfgWymagajProxy" type="checkbox">
+            <span>Wymagaj Proxy (nie łącz bez proxy)</span>
+          </label>
+        </div>
+        <div style="display:flex;align-items:flex-end">
+          <button type="button" onclick="zapiszKonfigNagrod()" style="width:100%;background:#ff9f2e;border:2px solid #ff9f2e;color:#090b10;font-weight:800;padding:10px 16px;font-size:12px;text-transform:uppercase">💾 Zapisz ustawienia</button>
+        </div>
+      </div>
+
+      <!-- Wizualny podgląd okna /darmowenagrody (jak na zrzucie ekranu) -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div style="font-size:11px;color:#8b98ad;font-weight:700">Podgląd GUI <code class="mono">/darmowenagrody</code> (kliknij slot):</div>
+        <div id="podgladGuiGrid" class="gui-grid"></div>
+        <div style="font-size:11px;color:#ffd188;font-weight:700">🔑 Slot #23 = Klucz po prawej stronie</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEKCJA 3: KOLEJKA 100 BOTÓW + LOGI NA ŻYWO -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(410px,1fr));gap:14px;padding:0 30px 34px">
+
+    <!-- Tabela 100 Botów -->
+    <div style="background:#0f141d;border:1px solid #1d2636;border-radius:18px;overflow:hidden;min-width:0">
+      <div style="padding:14px 20px;border-bottom:1px solid #1b2230;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:15px;font-weight:800">Kolejka 100 Botów (wchodzą po kolei 1 → 100)</span>
+        <span id="licznikTabeliBotow" class="mono" style="font-size:12px;color:#8b98ad">0 / 100 odebrano</span>
+      </div>
+      <div class="om-scroll" style="max-height:520px;overflow:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:620px">
+          <thead>
+            <tr style="position:sticky;top:0;background:#121824;z-index:2">
+              <th style="text-align:left;padding:10px 14px;color:#8b98ad;border-bottom:1px solid #1b2230">Bot</th>
+              <th style="text-align:left;padding:10px 14px;color:#8b98ad;border-bottom:1px solid #1b2230">Status nagrody</th>
+              <th style="text-align:left;padding:10px 14px;color:#8b98ad;border-bottom:1px solid #1b2230">Krok / Szczegóły</th>
+              <th style="text-align:left;padding:10px 14px;color:#8b98ad;border-bottom:1px solid #1b2230">Proxy SOCKS5</th>
+              <th style="text-align:right;padding:10px 14px;color:#8b98ad;border-bottom:1px solid #1b2230">Akcja</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaNagrodyBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dziennik zdarzeń -->
+    <div style="background:#07090e;border:1px solid #1d2636;border-radius:18px;display:flex;flex-direction:column;overflow:hidden;min-width:0">
+      <div style="padding:12px 18px;border-bottom:1px solid #1b2230;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:15px;font-weight:800">Dziennik Zdarzeń (Logi na żywo)</span>
+        <button id="btnPauzaLogow" type="button" onclick="przelaczPauzeLogow()" style="background:#151b26;border:none;border-radius:999px;color:#8b98ad;padding:5px 14px;font-size:11px;font-weight:700">Pauza</button>
+      </div>
+      <div id="kontenerLogow" class="om-scroll mono" style="max-height:520px;min-height:300px;overflow:auto;padding:10px 0;font-size:12px;line-height:1.55"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EKRAN LOGOWANIA -->
+<div id="ekranLogowania" style="position:fixed;inset:0;background:#090b10;display:flex;align-items:stretch;z-index:60">
+  <div style="flex:1 1 0;max-width:480px;margin:auto;padding:32px;width:100%">
+    <div style="background:#ff9f2e;color:#090b10;width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;margin-bottom:20px">🔑</div>
+    <div style="font-size:34px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px">Proxy &amp; Auto-Nagrody</div>
+    <div style="font-size:13px;color:#6c7a91;margin-bottom:24px">100 Botów po kolei · <code class="mono">/darmowenagrody</code> · Cykl co 5h 10min</div>
+    <div style="font-size:12px;color:#8b98ad;margin-bottom:8px">Hasło panelu (domyślnie: <code class="mono" style="color:#ff9f2e">admin123</code>)</div>
+    <input id="inputHasloPanelu" type="password" class="mono" placeholder="••••••••" onkeydown="if(event.key==='Enter')zaloguj()" style="width:100%;background:#111722;border:2px solid #263147;color:#e6edf7;padding:12px 14px;font-size:16px;margin-bottom:14px">
+    <button type="button" onclick="zaloguj()" style="background:#ff9f2e;border:2px solid #ff9f2e;color:#090b10;font-weight:800;padding:12px 20px;font-size:13px;text-transform:uppercase;letter-spacing:.12em;width:100%">Zaloguj się</button>
+    <div id="bladLogowania" style="margin-top:12px;font-size:13px;color:#ff5c5c;min-height:20px"></div>
+  </div>
+</div>
+
+<script>
+  const ZIELONY = '#35d07f', ZOLTY = '#ffc93c', CZERWONY = '#ff5c5c', POMARANCZ = '#ff9f2e', NIEBIESKI = '#5aa9ff';
+  let haslo = localStorage.getItem('flota_haslo') || '';
+  let ostatniStan = null;
+  let celNastepnyCyklMs = 0;
+  let pauzaLogow = false;
+  let czyPolaWypelnione = false;
+
+  // Rysowanie podglądu 5x9 GUI z zaznaczonym kluczem po prawej (slot 23)
+  function zbudujPodgladGui() {
+    const grid = document.getElementById('podgladGuiGrid');
+    const wybrane = parseInt(document.getElementById('cfgSlotKlucza').value, 10) || 23;
+    let html = '';
+    for (let i = 0; i < 45; i++) {
+      const r = Math.floor(i / 9), c = i % 9;
+      let cls = 'gui-slot';
+      let ikona = i;
+
+      if (i === 21) {
+        cls += ' left-item';
+        ikona = '💎+';
+      } else if (i === 23) {
+        cls += ' right-key';
+        ikona = '🔑';
+      } else if (r === 0 || r === 4 || c === 0 || c === 8) {
+        if (c <= 1 || c >= 7) cls += ' pink-glass';
+        else cls += ' gray-glass';
+      }
+
+      if (i === wybrane) cls += ' wybrany-slot';
+      html += `<div class="${cls}" onclick="wybierzSlotZPodgladu(${i})" title="Slot #${i} (rząd ${r + 1}, kolumna ${c + 1})">${ikona}</div>`;
+    }
+    grid.innerHTML = html;
+  }
+
+  function wybierzSlotZPodgladu(slotNr) {
+    document.getElementById('cfgSlotKlucza').value = slotNr;
+    zbudujPodgladGui();
+  }
+
+  function aktualizujPodgladGui() {
+    zbudujPodgladGui();
+  }
+
+  zbudujPodgladGui();
+
+  if (haslo) {
+    document.getElementById('inputHasloPanelu').value = haslo;
+    zaloguj(true);
+  }
+
+  function naglowki() {
+    return { 'x-haslo': haslo };
+  }
+
+  async function zaloguj(cicho = false) {
+    if (!cicho) haslo = document.getElementById('inputHasloPanelu').value.trim();
+    try {
+      const r = await fetch('/api/nagrody-stan', { headers: naglowki() });
+      if (r.status === 401) {
+        if (!cicho) document.getElementById('bladLogowania').textContent = 'Nieprawidłowe hasło';
+        return;
+      }
+      const d = await r.json();
+      localStorage.setItem('flota_haslo', haslo);
+      document.getElementById('ekranLogowania').classList.add('ukryte');
+      wypelnijKonfigFormularz(d);
+      renderuj(d);
+    } catch (e) {
+      if (!cicho) document.getElementById('bladLogowania').textContent = 'Brak połączenia z serwerem Node.js';
+    }
+  }
+
+  function wyloguj() {
+    localStorage.removeItem('flota_haslo');
+    haslo = '';
+    document.getElementById('ekranLogowania').classList.remove('ukryte');
+  }
+
+  setInterval(() => {
+    if (document.getElementById('ekranLogowania').classList.contains('ukryte')) {
+      pobierzStan();
+    }
+  }, 1500);
+
+  setInterval(() => {
+    const elZegar = document.getElementById('zegarNastepnyCykl');
+    if (ostatniStan && ostatniStan.cykl) {
+      if (ostatniStan.cykl.wTrakcie) {
+        elZegar.textContent = 'W TRAKCIE';
+        elZegar.style.color = POMARANCZ;
+      } else if (celNastepnyCyklMs > Date.now()) {
+        const sek = Math.max(0, Math.ceil((celNastepnyCyklMs - Date.now()) / 1000));
+        elZegar.textContent = formatujCzas(sek);
+        elZegar.style.color = ZIELONY;
+      } else {
+        const h = (ostatniStan.konfigNagrody && ostatniStan.konfigNagrody.interwalGodziny) ?? 5;
+        const m = (ostatniStan.konfigNagrody && ostatniStan.konfigNagrody.interwalMinuty) ?? 10;
+        elZegar.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`;
+        elZegar.style.color = '#8b98ad';
+      }
+    }
+  }, 1000);
+
+  function formatujCzas(sekundy) {
+    const h = Math.floor(sekundy / 3600);
+    const m = Math.floor((sekundy % 3600) / 60);
+    const s = sekundy % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  async function pobierzStan() {
+    try {
+      const r = await fetch('/api/nagrody-stan', { headers: naglowki() });
+      if (r.status === 401) { wyloguj(); return; }
+      const d = await r.json();
+      renderuj(d);
+    } catch (e) {}
+  }
+
+  let timerKom;
+  function pokazKomunikat(tekst, ok) {
+    const el = document.getElementById('poleKomunikatu');
+    el.textContent = tekst;
+    el.style.color = ok ? ZIELONY : CZERWONY;
+    clearTimeout(timerKom);
+    timerKom = setTimeout(() => { el.textContent = ''; }, 6000);
+  }
+
+  async function akcja(url, body = null) {
+    try {
+      const opcje = { method: 'POST', headers: naglowki() };
+      if (body !== null) opcje.body = typeof body === 'string' ? body : JSON.stringify(body);
+      const r = await fetch(url, opcje);
+      const d = await r.json();
+      pokazKomunikat(d.wiadomosc || d.powod || (d.ok ? 'OK' : 'Błąd'), !!d.ok);
+      pobierzStan();
+      return d;
+    } catch (e) {
+      pokazKomunikat('Błąd połączenia z serwerem', false);
+      return null;
+    }
+  }
+
+  function wypelnijKonfigFormularz(d) {
+    if (!d || czyPolaWypelnione) return;
+    czyPolaWypelnione = true;
+    const srv = d.serwer || {};
+    const ng = d.konfigNagrody || {};
+    document.getElementById('cfgHost').value = srv.host || 'anarchia.gg';
+    document.getElementById('cfgPort').value = srv.port || 25565;
+    document.getElementById('cfgWersja').value = srv.wersja || '1.20.1';
+    document.getElementById('cfgHaslo').value = srv.hasloKont || '';
+    document.getElementById('cfgKomendaTrybu').value = ng.komendaTrybu || srv.komendaWejscia || '';
+    document.getElementById('cfgKomendaNagrody').value = ng.komendaNagrody || '/darmowenagrody';
+    document.getElementById('cfgTrybSlotu').value = ng.trybSlotu || 'auto';
+    document.getElementById('cfgSlotKlucza').value = ng.slotKlucza ?? 23;
+    document.getElementById('cfgLiczbaBotow').value = ng.liczbaBotow || 100;
+    document.getElementById('cfgInterwalH').value = ng.interwalGodziny ?? 5;
+    document.getElementById('cfgInterwalM').value = ng.interwalMinuty ?? 10;
+    document.getElementById('cfgCzasLogin').value = ng.opoznieniePoLoginieS ?? 3;
+    document.getElementById('cfgCzasTryb').value = ng.opoznienieNaTrybieS ?? 4;
+    document.getElementById('cfgOdstepBotow').value = ng.odstepMiedzyBotamiS ?? 4;
+    document.getElementById('cfgLobbySlot').value = ng.lobbyKlikSlot ?? -1;
+    document.getElementById('cfgAutoPowtarzaj').checked = ng.autoPowtarzaj !== false;
+    document.getElementById('cfgWymagajProxy').checked = !!ng.wymagajProxy;
+    zbudujPodgladGui();
+  }
+
+  async function zapiszKonfigNagrod() {
+    const payload = {
+      host: document.getElementById('cfgHost').value,
+      port: document.getElementById('cfgPort').value,
+      wersja: document.getElementById('cfgWersja').value,
+      hasloKont: document.getElementById('cfgHaslo').value,
+      komendaTrybu: document.getElementById('cfgKomendaTrybu').value,
+      komendaNagrody: document.getElementById('cfgKomendaNagrody').value,
+      trybSlotu: document.getElementById('cfgTrybSlotu').value,
+      slotKlucza: document.getElementById('cfgSlotKlucza').value,
+      liczbaBotow: document.getElementById('cfgLiczbaBotow').value,
+      interwalGodziny: document.getElementById('cfgInterwalH').value,
+      interwalMinuty: document.getElementById('cfgInterwalM').value,
+      opoznieniePoLoginieS: document.getElementById('cfgCzasLogin').value,
+      opoznienieNaTrybieS: document.getElementById('cfgCzasTryb').value,
+      odstepMiedzyBotamiS: document.getElementById('cfgOdstepBotow').value,
+      lobbyKlikSlot: document.getElementById('cfgLobbySlot').value,
+      autoPowtarzaj: document.getElementById('cfgAutoPowtarzaj').checked,
+      wymagajProxy: document.getElementById('cfgWymagajProxy').checked,
+    };
+    await akcja('/api/nagrody-konfig', payload);
+  }
+
+  async function startCyklu() {
+    await zapiszKonfigNagrod();
+    await akcja('/api/nagrody-start');
+  }
+
+  async function pauzaCyklu() {
+    await akcja('/api/nagrody-pauza');
+  }
+
+  async function stopCyklu() {
+    await akcja('/api/nagrody-stop');
+  }
+
+  async function testujBota(slotNr) {
+    await zapiszKonfigNagrod();
+    await akcja('/api/nagrody-test-jeden?slot=' + slotNr);
+  }
+
+  async function dodajProxy() {
+    const txt = document.getElementById('poleNoweProxy').value.trim();
+    if (!txt) {
+      pokazKomunikat('Wklej najpierw adresy proxy SOCKS5!', false);
+      return;
+    }
+    const d = await akcja('/api/proxy-dodaj', txt);
+    if (d && d.ok) {
+      document.getElementById('poleNoweProxy').value = '';
+    }
+  }
+
+  async function testujWszystkieProxy() {
+    const lista = (ostatniStan && ostatniStan.proxyLista) || [];
+    if (!lista.length) {
+      pokazKomunikat('Brak proxy na liście do przetestowania', false);
+      return;
+    }
+    const btn = document.getElementById('btnTestWszystkich');
+    btn.textContent = '⏳ Testuję...';
+    let ok = 0;
+    for (const p of lista) {
+      const r = await akcja('/api/proxy-test?nr=' + p.nr);
+      if (r && r.ok) ok++;
+    }
+    btn.textContent = '⚡ Testuj wszystkie Proxy';
+    pokazKomunikat(`Przetestowano proxy: ${ok}/${lista.length} działa prawidłowo`, ok === lista.length);
+  }
+
+  async function usunBledneProxy() {
+    await akcja('/api/proxy-usun-bledne');
+  }
+
+  async function wyczyscProxy() {
+    if (!confirm('Na pewno usunąć wszystkie proxy z listy?')) return;
+    await akcja('/api/proxy-wyczysc');
+  }
+
+  async function przypiszProxy() {
+    const od = document.getElementById('przOd').value;
+    const doN = document.getElementById('przDo').value;
+    const nr = document.getElementById('przNrProxy').value;
+    await akcja(`/api/konto-proxy?od=${od}&do=${doN}&nr=${nr}`);
+  }
+
+  async function przelosujNicki() {
+    const od = document.getElementById('losOd').value;
+    const doN = document.getElementById('losDo').value;
+    if (!confirm(`Wymienić nicki w slotach #${od}–#${doN} na nowe z nicki.txt?`)) return;
+    await akcja(`/api/przelosuj?od=${od}&do=${doN}`);
+  }
+
+  function przelaczPauzeLogow() {
+    pauzaLogow = !pauzaLogow;
+    const btn = document.getElementById('btnPauzaLogow');
+    btn.textContent = pauzaLogow ? 'Wznów' : 'Pauza';
+    btn.style.color = pauzaLogow ? POMARANCZ : '#8b98ad';
+  }
+
+  function renderuj(d) {
+    ostatniStan = d;
+    const ng = d.konfigNagrody || {};
+    const c = d.cykl || {};
+    const srv = d.serwer || {};
+
+    celNastepnyCyklMs = c.nastepnyCyklMs || 0;
+
+    document.getElementById('naglowekSerwerInfo').textContent =
+      `Serwer: ${srv.host}:${srv.port} (${srv.wersja || 'auto'}) · Pula nicków: ${d.pulaNickow || 0}`;
+
+    // Status żywy
+    const kr = document.getElementById('kropkaCyklu');
+    document.getElementById('tekstAktualnyKrok').textContent = c.aktualnyKrok || 'Gotowy';
+    if (c.wTrakcie) {
+      kr.style.background = c.wstrzymany ? ZOLTY : ZIELONY;
+      kr.style.animation = 'puls 1.4s infinite';
+    } else if (c.aktywny && c.nastepnyCyklMs > Date.now()) {
+      kr.style.background = NIEBIESKI;
+      kr.style.animation = 'puls 2.2s infinite';
+    } else {
+      kr.style.background = '#5a6678';
+      kr.style.animation = 'none';
+    }
+
+    // Przyciski sterowania
+    document.getElementById('btnPauzaCyklu').textContent = c.wstrzymany ? '▶ Wznów' : '⏸ Pauza';
+
+    // Karta 1: Postęp
+    const ileBotow = ng.liczbaBotow || 100;
+    const odebrano = c.odebranoWTymCyklu || 0;
+    const pct = Math.min(100, Math.round((odebrano / ileBotow) * 100));
+    document.getElementById('badgeNrCyklu').textContent = `Cykl #${c.nrCyklu || 0}`;
+    document.getElementById('statOdebrano').textContent = odebrano;
+    document.getElementById('statNaIle').textContent = '/' + ileBotow;
+    document.getElementById('pasekPostepuCyklu').style.width = pct + '%';
+    document.getElementById('statBledyCyklu').textContent = `Błędy: ${c.bledyWTymCyklu || 0}`;
+    document.getElementById('statLacznieOdebrano').textContent = `Łącznie kluczy: ${c.lacznieOdebrano || 0}`;
+
+    // Karta 2: Harmonogram 5h 10min
+    const badgeAuto = document.getElementById('badgeAutoPowtarzaj');
+    badgeAuto.textContent = ng.autoPowtarzaj ? `CO ${ng.interwalGodziny}H ${ng.interwalMinuty}M` : 'TYLKO 1×';
+    badgeAuto.style.color = ng.autoPowtarzaj ? ZIELONY : ZOLTY;
+
+    // Karta 3: Aktualny bot
+    if (c.wTrakcie && c.aktualnySlot) {
+      document.getElementById('statAktualnyBot').textContent = `#${c.aktualnySlot} ${c.aktualnyNick}`;
+      document.getElementById('statAktualnySlotInfo').textContent = c.aktualnyKrok || 'W grze...';
+    } else {
+      document.getElementById('statAktualnyBot').textContent = c.aktywny ? 'Oczekuje na zegar 5h 10m' : 'Brak (zatrzymany)';
+      document.getElementById('statAktualnySlotInfo').textContent = `Skonfigurowano ${ileBotow} botów po kolei`;
+    }
+
+    // Karta 4: Proxy
+    const listaProxy = d.proxyLista || [];
+    const dzialajaceProxy = listaProxy.filter(p => p.test && p.test.ok).length;
+    document.getElementById('statLiczbaProxy').textContent = listaProxy.length;
+    document.getElementById('statDzokProxy').textContent = listaProxy.length ? `(${dzialajaceProxy} przetestowanych OK)` : '';
+    const opisPr = document.getElementById('opisProxyRozklad');
+    if (listaProxy.length > 0) {
+      document.getElementById('statLiczbaProxy').style.color = '#e6edf7';
+      opisPr.style.color = '#8b98ad';
+      opisPr.textContent = `Rozkład: ok. ${Math.ceil(ileBotow / listaProxy.length)} botów na 1 proxy SOCKS5`;
+    } else {
+      document.getElementById('statLiczbaProxy').style.color = ZOLTY;
+      opisPr.style.color = ZOLTY;
+      opisPr.textContent = 'Brak dodanych proxy — dodaj poniżej lub testuj lokalnie';
+    }
+
+    // Select proxy
+    const selPr = document.getElementById('przNrProxy');
+    const staryWybor = selPr.value;
+    selPr.innerHTML = `<option value="0">Auto (równo na wszystkie proxy)</option>` +
+      listaProxy.map(p => `<option value="${p.nr}">Proxy #${p.nr} (${p.host}:${p.port})</option>`).join('');
+    selPr.value = staryWybor || '0';
+
+    // Karty Proxy
+    const kontenerProxy = document.getElementById('kontenerKartProxy');
+    if (listaProxy.length === 0) {
+      kontenerProxy.innerHTML = `<div style="grid-column:1/-1;padding:12px;text-align:center;color:#ffc93c;font-size:13px">Brak serwerów Proxy SOCKS5. Wklej swoje proxy w polu powyżej i kliknij „+ Dodaj Proxy do puli".</div>`;
+    } else {
+      kontenerProxy.innerHTML = listaProxy.map(p => {
+        const t = p.test;
+        const krKolor = !t ? '#4a5568' : t.ok ? ZIELONY : CZERWONY;
+        const tOpis = !t ? 'nie testowane' : t.ok ? `✓ ${t.ms} ms` : `✗ ${t.powod}`;
+        return `
+          <div style="background:#121824;border:1px solid #1f293d;border-radius:13px;padding:12px 14px;display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:13px">
+                <span style="width:8px;height:8px;border-radius:999px;background:${krKolor}"></span>${p.nazwa}
+              </span>
+              <span style="font-size:11px;color:${krKolor};font-weight:700">${tOpis}</span>
+            </div>
+            <div class="mono" style="font-size:11px;color:#8b98ad;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.host}:${p.port}${p.user ? ' · ' + p.user : ''}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
+              <span style="font-size:11px;color:#6c7a91">Przypisanych botów: <b style="color:#e6edf7">${p.kont}</b></span>
+              <div style="display:flex;gap:5px">
+                <button type="button" onclick="akcja('/api/proxy-test?nr=${p.nr}')" style="background:#192233;border:none;border-radius:999px;color:#9aa7bd;padding:4px 10px;font-size:11px;font-weight:700">Testuj</button>
+                <button type="button" onclick="akcja('/api/proxy-usun?nr=${p.nr}')" style="background:#192233;border:none;border-radius:999px;color:#ff5c5c;padding:4px 10px;font-size:11px;font-weight:700">Usuń</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Tabela 100 Botów
+    const boty = d.boty || [];
+    document.getElementById('licznikTabeliBotow').textContent = `${odebrano} / ${boty.length} odebrano w tym cyklu`;
+    const tbody = document.getElementById('tabelaNagrodyBody');
+
+    tbody.innerHTML = boty.map(b => {
+      let badgeKolor = '#252f42', badgeTekstKolor = '#9aa7bd', etykieta = 'Oczekuje';
+      if (b.stan === 'w grze') {
+        badgeKolor = POMARANCZ; badgeTekstKolor = '#090b10'; etykieta = '▶ W GRZE (ODBIERA)';
+      } else if (b.stan === 'odebrano') {
+        badgeKolor = ZIELONY; badgeTekstKolor = '#090b10'; etykieta = '✅ ODEBRANO KLUCZ';
+      } else if (b.stan === 'błąd') {
+        badgeKolor = CZERWONY; badgeTekstKolor = '#090b10'; etykieta = '✗ BŁĄD';
+      }
+
+      const czasOst = b.ostatnioOdebrano
+        ? new Date(b.ostatnioOdebrano).toLocaleTimeString('pl-PL')
+        : '';
+
+      return `
+        <tr style="background:${b.stan === 'w grze' ? 'rgba(255,159,46,.08)' : 'transparent'}">
+          <td class="mono" style="padding:9px 14px;border-bottom:1px solid #161d2b;font-weight:700">
+            <span style="color:#6c7a91;margin-right:6px">#${b.slot}</span>${b.nick}
+          </td>
+          <td style="padding:9px 14px;border-bottom:1px solid #161d2b">
+            <span style="display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800;background:${badgeKolor};color:${badgeTekstKolor}">${etykieta}</span>
+            ${b.ileRazy > 0 ? `<span style="font-size:11px;color:#35d07f;margin-left:6px">(${b.ileRazy}×)</span>` : ''}
+          </td>
+          <td style="padding:9px 14px;border-bottom:1px solid #161d2b;font-size:12px;color:#9aa7bd">
+            <div>${b.krok || '—'}</div>
+            ${czasOst ? `<div style="font-size:11px;color:#6c7a91">Ostatnio: ${czasOst}${b.slotKlikniety !== null ? ' · slot #' + b.slotKlikniety : ''}</div>` : ''}
+          </td>
+          <td class="mono" style="padding:9px 14px;border-bottom:1px solid #161d2b;font-size:11px;color:${b.proxyNr ? '#e6edf7' : '#ffc93c'}">
+            ${b.proxyNr ? `Proxy #${b.proxyNr} (${b.proxy})` : 'bez proxy'}
+          </td>
+          <td style="padding:9px 14px;border-bottom:1px solid #161d2b;text-align:right">
+            <button type="button" onclick="testujBota(${b.slot})" ${c.wTrakcie ? 'disabled' : ''}
+              style="background:#171f2e;border:1px solid #28344b;border-radius:999px;color:#ff9f2e;padding:4px 11px;font-size:11px;font-weight:800">
+              ▶ Wpuść #${b.slot}
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Logi
+    if (!pauzaLogow) {
+      const logBox = document.getElementById('kontenerLogow');
+      const bylNaDole = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 60;
+      const linie = (d.dziennik || []).slice(-140);
+      logBox.innerHTML = linie.map(l => {
+        const m = /^\[(\d\d:\d\d:\d\d)\]\s?([\s\S]*)$/.exec(l) || [null, '', l];
+        const t = m[2];
+        let kolor = '#28344b', tekstKolor = '#9aa7bd', tlo = 'transparent';
+        if (/✅|🎁|🔑|🏁/.test(t)) { kolor = ZIELONY; tekstKolor = '#d1fae5'; tlo = 'rgba(53,208,127,.06)'; }
+        else if (/✗|❌|KICK|Błąd/.test(t)) { kolor = CZERWONY; tekstKolor = '#fecaca'; tlo = 'rgba(255,92,92,.07)'; }
+        else if (/🚀|💬|🔐|⏰/.test(t)) { kolor = POMARANCZ; tekstKolor = '#fde68a'; }
+        return `
+          <div style="display:flex;gap:8px;padding:3px 14px;margin:1px 10px;border-radius:7px;border-left:3px solid ${kolor};background:${tlo}">
+            <span style="color:#4a5568;flex:0 0 auto">${m[1]}</span>
+            <span style="color:${tekstKolor};word-break:break-word">${t}</span>
+          </div>
+        `;
+      }).join('');
+      if (bylNaDole) logBox.scrollTop = logBox.scrollHeight;
+    }
+  }
+</script>
+</body>
+</html>

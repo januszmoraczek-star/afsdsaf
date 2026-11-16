@@ -1,0 +1,1467 @@
+{
+  "hasloPanelu": "admin123",
+  "mcHost": "rapy.gg",
+  "mcPort": 25565,
+  "mcWersja": "1.21.11",
+  "mcHasloKont": "HasloBotow123!",
+  "mcKomendaWejscia": "",
+  "odstepKolejkiMs": 15000,
+  "max": 100,
+  "proxyLista": [
+    {
+      "nr": 1,
+      "nazwa": "Proxy 1",
+      "host": "res.proxy-seller.com",
+      "port": 10000,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 415,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 2,
+      "nazwa": "Proxy 2",
+      "host": "res.proxy-seller.com",
+      "port": 10001,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 229,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 3,
+      "nazwa": "Proxy 3",
+      "host": "res.proxy-seller.com",
+      "port": 10002,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 212,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 4,
+      "nazwa": "Proxy 4",
+      "host": "res.proxy-seller.com",
+      "port": 10003,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 230,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 5,
+      "nazwa": "Proxy 5",
+      "host": "res.proxy-seller.com",
+      "port": 10004,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 267,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 6,
+      "nazwa": "Proxy 6",
+      "host": "res.proxy-seller.com",
+      "port": 10005,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 223,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 7,
+      "nazwa": "Proxy 7",
+      "host": "res.proxy-seller.com",
+      "port": 10006,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 220,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 8,
+      "nazwa": "Proxy 8",
+      "host": "res.proxy-seller.com",
+      "port": 10007,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 233,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 9,
+      "nazwa": "Proxy 9",
+      "host": "res.proxy-seller.com",
+      "port": 10008,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 222,
+        "powod": ""
+      }
+    },
+    {
+      "nr": 10,
+      "nazwa": "Proxy 10",
+      "host": "res.proxy-seller.com",
+      "port": 10009,
+      "user": "282f0cda04e15efc",
+      "pass": "hEFuO6NeC4fMAi0a",
+      "test": {
+        "ok": true,
+        "ms": 261,
+        "powod": ""
+      }
+    }
+  ],
+  "sloty": [
+    {
+      "slot": 1,
+      "nick": "Tygrys_PL_3052",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 2,
+      "nick": "Wesoly_4744",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 3,
+      "nick": "MrKamyk_TV_9557",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 4,
+      "nick": "KamilPL_MC_1346",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 5,
+      "nick": "SmokMC_Pro_5346",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 6,
+      "nick": "WojtekPL_2411",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 7,
+      "nick": "MrMati_PvP_1394",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 8,
+      "nick": "Kacper_XD_3861",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 9,
+      "nick": "Lisek_TV_7514",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 10,
+      "nick": "Wesoly_YT_3960",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 11,
+      "nick": "xFilip_1113",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 12,
+      "nick": "Tomek_PL_1536",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 13,
+      "nick": "TomekPL_PvP_8688",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 14,
+      "nick": "Patryk_XD_5057",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 15,
+      "nick": "DawidMC_PvP_8760",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 16,
+      "nick": "Dobry_PL_8791",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 17,
+      "nick": "Feniks_MC_2157",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 18,
+      "nick": "Zloty_PvP_5010",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 19,
+      "nick": "Grom_6175",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 20,
+      "nick": "Szybki_2100",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 21,
+      "nick": "Golem_MC_6290",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 22,
+      "nick": "Dziki_PL_4961",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 23,
+      "nick": "Rekin_PL_8597",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 24,
+      "nick": "Hubert_PvP_4081",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 25,
+      "nick": "KubaMC_MC_6218",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 26,
+      "nick": "MrKamyk_XD_5106",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 27,
+      "nick": "Wojtek_XD_9952",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 28,
+      "nick": "Smok_YT_9456",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 29,
+      "nick": "Czarny_XD_7246",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 30,
+      "nick": "Zloty_Pro_3867",
+      "wlaczony": true,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 31,
+      "nick": "Wojtek_MC_4423",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 32,
+      "nick": "Grom_TV_4037",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 33,
+      "nick": "xOskar_Pro_6126",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 34,
+      "nick": "SirKuba_YT_9266",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 35,
+      "nick": "Mati_TV_6479",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 36,
+      "nick": "Szybki_PvP_6159",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 37,
+      "nick": "Cien_XD_2486",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 38,
+      "nick": "BartekMC_PL_4726",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 39,
+      "nick": "BartekMC_PL_9526",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 40,
+      "nick": "Kuba_XD_5999",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 41,
+      "nick": "Michal_PvP_1167",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 42,
+      "nick": "Tomek_Pro_2310",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 43,
+      "nick": "MrWilk_TV_3875",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 44,
+      "nick": "Wesoly_MC_1179",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 45,
+      "nick": "xKacper_MC_6466",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 46,
+      "nick": "Jastrzab_PL_2288",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 47,
+      "nick": "Jastrzab_MC_6607",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 48,
+      "nick": "PanLisek_PL_6106",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 49,
+      "nick": "MrKuba_Pro_6248",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 50,
+      "nick": "SmokMC_YT_4931",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 51,
+      "nick": "xBartek_MC_6029",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 52,
+      "nick": "Nikodem_5489",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 53,
+      "nick": "MrKuba_1501",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 54,
+      "nick": "xOskar_TV_1664",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 55,
+      "nick": "MatiMC_XD_6919",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 56,
+      "nick": "Hubert_8893",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 57,
+      "nick": "Szymon_PvP_1751",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 58,
+      "nick": "Nocny_PvP_9591",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 59,
+      "nick": "Feniks_TV_3431",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 60,
+      "nick": "PanLisek_1357",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 61,
+      "nick": "PanKamyk_1305",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 62,
+      "nick": "MrKuba_TV_9395",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 63,
+      "nick": "Nikodem_TV_2686",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 64,
+      "nick": "Tygrys_PL_2324",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 65,
+      "nick": "Kamil_TV_4538",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 66,
+      "nick": "Smok_PvP_1627",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 67,
+      "nick": "Sokol_PvP_7876",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 68,
+      "nick": "Hubert_PvP_7933",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 69,
+      "nick": "Grom_MC_8160",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 70,
+      "nick": "Wicher_Pro_1707",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 71,
+      "nick": "MrWilk_5096",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 72,
+      "nick": "Dobry_4316",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 73,
+      "nick": "xFilip_YT_3717",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 74,
+      "nick": "xKamil_PvP_2088",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 75,
+      "nick": "Bialy_6776",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 76,
+      "nick": "xKamil_Pro_6619",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 77,
+      "nick": "FilipMC_PvP_3230",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 78,
+      "nick": "Lisek_XD_1060",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 79,
+      "nick": "Szybki_PvP_9058",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 80,
+      "nick": "Stary_TV_2285",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 81,
+      "nick": "MrWilk_XD_7201",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 82,
+      "nick": "Igor_YT_9742",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 83,
+      "nick": "Szymon_PvP_1174",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 84,
+      "nick": "MrLisek_TV_7271",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 85,
+      "nick": "Piorun_4249",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 86,
+      "nick": "Nikodem_PL_3889",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 87,
+      "nick": "Kacper_YT_6302",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 88,
+      "nick": "MatiPL_4752",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 89,
+      "nick": "Igor_TV_9394",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 90,
+      "nick": "KubaMC_Pro_6333",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 91,
+      "nick": "PanWilk_1318",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 92,
+      "nick": "Grom_MC_6835",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 93,
+      "nick": "Szymon_XD_1584",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 94,
+      "nick": "Jastrzab_MC_2527",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 95,
+      "nick": "KubaPL_8051",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 96,
+      "nick": "Dziki_PL_5759",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 97,
+      "nick": "Filip_PvP_8699",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 98,
+      "nick": "Kobra_PL_2704",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 99,
+      "nick": "DawidPL_3501",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    },
+    {
+      "slot": 100,
+      "nick": "TomekPL_Pro_9650",
+      "wlaczony": false,
+      "proxyReczne": false,
+      "proxyNr": 0,
+      "skryptNazwa": "dynie",
+      "blad": ""
+    }
+  ],
+  "ostatnieLosowanie": {
+    "od": 1,
+    "do": 100,
+    "lista": [
+      {
+        "slot": 1,
+        "staryNick": "Nocny_6281"
+      },
+      {
+        "slot": 2,
+        "staryNick": "kopacz_5404"
+      },
+      {
+        "slot": 3,
+        "staryNick": "Lisek4556"
+      },
+      {
+        "slot": 4,
+        "staryNick": "dyniarz_4388"
+      },
+      {
+        "slot": 5,
+        "staryNick": "PanKamyk_3553"
+      },
+      {
+        "slot": 6,
+        "staryNick": "Wicher9921"
+      },
+      {
+        "slot": 7,
+        "staryNick": "MrWilk_3196"
+      },
+      {
+        "slot": 8,
+        "staryNick": "Jastrzab_MC_1909"
+      },
+      {
+        "slot": 9,
+        "staryNick": "xFilipYT_3739"
+      },
+      {
+        "slot": 10,
+        "staryNick": "WilkuYT_3551"
+      },
+      {
+        "slot": 11,
+        "staryNick": "DobryXD_4940"
+      },
+      {
+        "slot": 12,
+        "staryNick": "DawidPL6498"
+      },
+      {
+        "slot": 13,
+        "staryNick": "Stary_PL_3035"
+      },
+      {
+        "slot": 14,
+        "staryNick": "PanKamyk9368"
+      },
+      {
+        "slot": 15,
+        "staryNick": "SirMati8257"
+      },
+      {
+        "slot": 16,
+        "staryNick": "BartekPL5282"
+      },
+      {
+        "slot": 17,
+        "staryNick": "Grom_MC9076"
+      },
+      {
+        "slot": 18,
+        "staryNick": "Stary_3642"
+      },
+      {
+        "slot": 19,
+        "staryNick": "WojtekPvP_8277"
+      },
+      {
+        "slot": 20,
+        "staryNick": "xDawid_PL8132"
+      },
+      {
+        "slot": 21,
+        "staryNick": "Smok_1966"
+      },
+      {
+        "slot": 22,
+        "staryNick": "Szymon_1026"
+      },
+      {
+        "slot": 23,
+        "staryNick": "KubaPL_2165"
+      },
+      {
+        "slot": 24,
+        "staryNick": "Filip_1108"
+      },
+      {
+        "slot": 25,
+        "staryNick": "Feniks_1969"
+      },
+      {
+        "slot": 26,
+        "staryNick": "MrMati_4919"
+      },
+      {
+        "slot": 27,
+        "staryNick": "xTomekPvP4023"
+      },
+      {
+        "slot": 28,
+        "staryNick": "KobraXD_6835"
+      },
+      {
+        "slot": 29,
+        "staryNick": "BartekPL_4762"
+      },
+      {
+        "slot": 30,
+        "staryNick": "PanLisek_6135"
+      },
+      {
+        "slot": 31,
+        "staryNick": "BartekMCTV1826"
+      },
+      {
+        "slot": 32,
+        "staryNick": "xTomek_2321"
+      },
+      {
+        "slot": 33,
+        "staryNick": "MrMati_2687"
+      },
+      {
+        "slot": 34,
+        "staryNick": "Hubert_8063"
+      },
+      {
+        "slot": 35,
+        "staryNick": "Piotrek7297"
+      },
+      {
+        "slot": 36,
+        "staryNick": "PanKamyk_5291"
+      },
+      {
+        "slot": 37,
+        "staryNick": "TomekPL_7527"
+      },
+      {
+        "slot": 38,
+        "staryNick": "xKuba_7835"
+      },
+      {
+        "slot": 39,
+        "staryNick": "Wesoly_9263"
+      },
+      {
+        "slot": 40,
+        "staryNick": "olek_PL8187"
+      },
+      {
+        "slot": 41,
+        "staryNick": "bystry_MC_6644"
+      },
+      {
+        "slot": 42,
+        "staryNick": "Stary2980"
+      },
+      {
+        "slot": 43,
+        "staryNick": "KubaMC_7354"
+      },
+      {
+        "slot": 44,
+        "staryNick": "xBartekPvP_5156"
+      },
+      {
+        "slot": 45,
+        "staryNick": "Dawid_3677"
+      },
+      {
+        "slot": 46,
+        "staryNick": "Szybki_PL_2998"
+      },
+      {
+        "slot": 47,
+        "staryNick": "dyniarzXD_9328"
+      },
+      {
+        "slot": 48,
+        "staryNick": "MrWilk_4198"
+      },
+      {
+        "slot": 49,
+        "staryNick": "Grom_MC_1682"
+      },
+      {
+        "slot": 50,
+        "staryNick": "Maciek_1777"
+      },
+      {
+        "slot": 51,
+        "staryNick": "Szary_9828"
+      },
+      {
+        "slot": 52,
+        "staryNick": "SirMati_2655"
+      },
+      {
+        "slot": 53,
+        "staryNick": "gracz_MC_3301"
+      },
+      {
+        "slot": 54,
+        "staryNick": "LisekMCTV_1370"
+      },
+      {
+        "slot": 55,
+        "staryNick": "xTomek_4818"
+      },
+      {
+        "slot": 56,
+        "staryNick": "Mroczny_PL_6187"
+      },
+      {
+        "slot": 57,
+        "staryNick": "SmokMC5166"
+      },
+      {
+        "slot": 58,
+        "staryNick": "PanLisek_9764"
+      },
+      {
+        "slot": 59,
+        "staryNick": "xKamilPvP5801"
+      },
+      {
+        "slot": 60,
+        "staryNick": "Wicher5967"
+      },
+      {
+        "slot": 61,
+        "staryNick": "Dziki3071"
+      },
+      {
+        "slot": 62,
+        "staryNick": "Nocny_6802"
+      },
+      {
+        "slot": 63,
+        "staryNick": "MrLisek_8391"
+      },
+      {
+        "slot": 64,
+        "staryNick": "KacperMC7145"
+      },
+      {
+        "slot": 65,
+        "staryNick": "xOskar_7622"
+      },
+      {
+        "slot": 66,
+        "staryNick": "CienXD_2008"
+      },
+      {
+        "slot": 67,
+        "staryNick": "BartekMC_PL_9893"
+      },
+      {
+        "slot": 68,
+        "staryNick": "WilkuMCPro_4338"
+      },
+      {
+        "slot": 69,
+        "staryNick": "xFilip9006"
+      },
+      {
+        "slot": 70,
+        "staryNick": "Wesoly_6903"
+      },
+      {
+        "slot": 71,
+        "staryNick": "bystry_5229"
+      },
+      {
+        "slot": 72,
+        "staryNick": "FilipPL_3216"
+      },
+      {
+        "slot": 73,
+        "staryNick": "Czarny_MC_2242"
+      },
+      {
+        "slot": 74,
+        "staryNick": "KacperPL_5307"
+      },
+      {
+        "slot": 75,
+        "staryNick": "CzarnyYT_1207"
+      },
+      {
+        "slot": 76,
+        "staryNick": "SzymonXD_3439"
+      },
+      {
+        "slot": 77,
+        "staryNick": "Igor_9793"
+      },
+      {
+        "slot": 78,
+        "staryNick": "dyniarz_8816"
+      },
+      {
+        "slot": 79,
+        "staryNick": "xKuba_2335"
+      },
+      {
+        "slot": 80,
+        "staryNick": "Cichy_MC_3943"
+      },
+      {
+        "slot": 81,
+        "staryNick": "Wilku8244"
+      },
+      {
+        "slot": 82,
+        "staryNick": "MrWilk_7311"
+      },
+      {
+        "slot": 83,
+        "staryNick": "OskarPL_7050"
+      },
+      {
+        "slot": 84,
+        "staryNick": "Dziki_6382"
+      },
+      {
+        "slot": 85,
+        "staryNick": "Dawid_PL_8880"
+      },
+      {
+        "slot": 86,
+        "staryNick": "PanWilk_9845"
+      },
+      {
+        "slot": 87,
+        "staryNick": "PanKamykXD_5729"
+      },
+      {
+        "slot": 88,
+        "staryNick": "Hubert_MC8542"
+      },
+      {
+        "slot": 89,
+        "staryNick": "ziomek_5215"
+      },
+      {
+        "slot": 90,
+        "staryNick": "Bartek_7296"
+      },
+      {
+        "slot": 91,
+        "staryNick": "SzymonPro_1179"
+      },
+      {
+        "slot": 92,
+        "staryNick": "Cien_1293"
+      },
+      {
+        "slot": 93,
+        "staryNick": "Cien5892"
+      },
+      {
+        "slot": 94,
+        "staryNick": "Kacper7976"
+      },
+      {
+        "slot": 95,
+        "staryNick": "Tomek_7827"
+      },
+      {
+        "slot": 96,
+        "staryNick": "FilipMC_MC_9685"
+      },
+      {
+        "slot": 97,
+        "staryNick": "TygrysXD_7824"
+      },
+      {
+        "slot": 98,
+        "staryNick": "xMati_4446"
+      },
+      {
+        "slot": 99,
+        "staryNick": "Szybki_7310"
+      },
+      {
+        "slot": 100,
+        "staryNick": "MrMatiPro_4880"
+      }
+    ]
+  },
+  "nagrody": {
+    "liczbaBotow": 100,
+    "komendaTrybu": "",
+    "lobbyKlikSlot": 10,
+    "lobbyHotbarSlot": 4,
+    "komendaNagrody": "/darmowenagrody",
+    "trybSlotu": "auto",
+    "slotKlucza": 23,
+    "opoznieniePoLoginieS": 3,
+    "opoznienieNaTrybieS": 4,
+    "odstepMiedzyBotamiS": 4,
+    "timeoutBotaS": 45,
+    "interwalGodziny": 5,
+    "interwalMinuty": 10,
+    "autoPowtarzaj": true,
+    "wymagajProxy": false
+  }
+}

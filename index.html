@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flota Botów · Panel Sterowania</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: #0a0c10; color: #e6edf7;
+      font-family: 'Archivo', system-ui, sans-serif;
+      font-size: 15px; line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+      overflow-x: hidden;
+    }
+    @keyframes puls { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
+    input, select, button, textarea {
+      font-family: 'Archivo', system-ui, sans-serif;
+      border-radius: 12px;
+    }
+    button { cursor: pointer; transition: opacity .15s, transform .08s; }
+    button:active { transform: scale(0.98); }
+    button:disabled { cursor: not-allowed; opacity: 0.45 !important; }
+    input:focus-visible, select:focus-visible, button:focus-visible, textarea:focus-visible {
+      outline: 2px solid #ff8a3d; outline-offset: 2px;
+    }
+    ::selection { background: #ff8a3d; color: #0a0c10; }
+    .om-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+    .om-scroll::-webkit-scrollbar-track { background: #0a0c10; }
+    .om-scroll::-webkit-scrollbar-thumb { background: #2b3444; border-radius: 5px; }
+    .om-scroll::-webkit-scrollbar-thumb:hover { background: #3e4a60; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .ukryte { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div style="min-height:100vh;background:radial-gradient(900px 380px at 8% -8%,rgba(255,138,61,.13),transparent 62%),radial-gradient(700px 300px at 100% 0%,rgba(90,169,255,.07),transparent 60%),#0a0c10;">
+
+  <!-- NAGŁÓWEK -->
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:22px 30px 18px">
+    <div style="display:flex;align-items:center;gap:14px;min-width:0">
+      <div style="background:#ff8a3d;color:#0a0c10;width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;letter-spacing:-.04em">FL</div>
+      <div style="display:flex;flex-direction:column;min-width:0">
+        <div style="font-weight:800;font-size:20px;letter-spacing:-.025em;line-height:1.1">Flota Botów &amp; Farma</div>
+        <div id="naglowekSerwer" style="font-size:11px;color:#5a6678;letter-spacing:.06em">ładowanie...</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <a href="/proxy" style="text-decoration:none;background:#ff8a3d;border:1px solid #ff8a3d;border-radius:999px;color:#0a0c10;padding:7px 16px;font-size:12px;font-weight:800">🔑 Strona Proxy &amp; Auto-Nagrody (100 Botów · 5h 10min) →</a>
+      <button type="button" onclick="przelaczKonfigSerwera()" style="background:#151a23;border:1px solid #232b3a;border-radius:999px;color:#e6edf7;padding:7px 14px;font-size:12px;font-weight:700">⚙️ Zmień serwer MC</button>
+      <button type="button" onclick="przelaczEdytorSkryptu()" style="background:#151a23;border:1px solid #232b3a;border-radius:999px;color:#ff8a3d;padding:7px 14px;font-size:12px;font-weight:700">🎃 Edytor skryptów</button>
+      <div style="display:flex;align-items:center;gap:9px;padding:7px 14px;border-radius:999px;background:#11151c">
+        <span id="kropkaStanu" style="width:8px;height:8px;flex:0 0 auto;border-radius:999px;background:#5a6678"></span>
+        <span id="etykietaStanu" style="font-size:12px;color:#8b98ad;white-space:nowrap">flota pusta</span>
+      </div>
+      <button type="button" onclick="wyloguj()" style="background:none;border:none;border-radius:999px;color:#5a6678;padding:7px 14px;font-size:12px">Wyloguj</button>
+    </div>
+  </div>
+
+  <!-- PANEL KONFIGURACJI SERWERA DOCELOWEGO MC -->
+  <div id="panelSerwera" class="ukryte" style="margin:0 30px 18px;border-radius:18px;background:#0e1219;border:1px solid #ff8a3d;padding:18px 22px">
+    <div style="font-weight:800;font-size:15px;margin-bottom:12px;color:#ff8a3d">⚙️ Konfiguracja docelowego serwera Minecraft</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px">
+      <div>
+        <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Adres IP / Domena serwera</div>
+        <input id="srvHost" class="mono" placeholder="np. anarchia.gg" style="width:100%;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 10px;font-size:13px">
+      </div>
+      <div>
+        <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Port (domyślnie 25565)</div>
+        <input id="srvPort" type="number" class="mono" placeholder="25565" style="width:100%;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 10px;font-size:13px">
+      </div>
+      <div>
+        <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Wersja MC (np. 1.20.1)</div>
+        <input id="srvWersja" class="mono" placeholder="1.20.1" style="width:100%;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 10px;font-size:13px">
+      </div>
+      <div>
+        <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Hasło do /login i /register</div>
+        <input id="srvHaslo" class="mono" placeholder="HasloBotow123!" style="width:100%;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 10px;font-size:13px">
+      </div>
+      <div>
+        <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Auto-komenda po wejściu (opcjonalnie)</div>
+        <input id="srvKomenda" class="mono" placeholder="np. /warp dynie" style="width:100%;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 10px;font-size:13px">
+      </div>
+      <div>
+        <div style="font-size:11px;color:#8b98ad;margin-bottom:4px">Odstęp kolejki wejść (sekundy)</div>
+        <input id="srvOdstep" type="number" class="mono" placeholder="15" style="width:100%;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 10px;font-size:13px">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button type="button" onclick="zapiszSerwer()" style="background:#ff8a3d;border:2px solid #ff8a3d;color:#0a0c10;font-weight:800;padding:8px 18px;font-size:12px;text-transform:uppercase">Zapisz ustawienia serwera</button>
+      <button type="button" onclick="przelaczKonfigSerwera()" style="background:none;border:2px solid #232b3a;color:#8b98ad;font-weight:700;padding:8px 16px;font-size:12px">Zamknij</button>
+    </div>
+  </div>
+
+  <!-- EDYTOR SKRYPTÓW (DYNIE / WŁASNY) -->
+  <div id="panelSkryptow" class="ukryte" style="margin:0 30px 18px;border-radius:18px;background:#0e1219;border:1px solid #35d07f;padding:18px 22px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+      <div>
+        <span style="font-weight:800;font-size:15px;color:#35d07f">🎃 Edytor skryptów na żywo</span>
+        <span style="font-size:12px;color:#8b98ad;margin-left:10px">Możesz tu wkleić swój skrypt na niszczenie dyń i zapisać bez restartu serwera!</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button type="button" onclick="wczytajKodSkryptu('nagrody')" style="background:#151a23;border:1px solid #ff8a3d;color:#ff8a3d;padding:6px 12px;font-size:12px;font-weight:700">Załaduj: skrypty/nagrody.js</button>
+        <button type="button" onclick="wczytajKodSkryptu('dynie')" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 12px;font-size:12px;font-weight:700">Załaduj: skrypty/dynie.js</button>
+        <button type="button" onclick="wczytajKodSkryptu('wlasny')" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 12px;font-size:12px;font-weight:700">Załaduj: skrypty/wlasny.js</button>
+      </div>
+    </div>
+    <textarea id="poleKoduSkryptu" rows="12" class="mono" style="width:100%;background:#07090c;border:2px solid #232b3a;color:#cfe9db;padding:12px;font-size:12px;line-height:1.45;resize:vertical;margin-bottom:12px"></textarea>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button type="button" onclick="zapiszKodSkryptu()" style="background:#35d07f;border:2px solid #35d07f;color:#0a0c10;font-weight:800;padding:8px 18px;font-size:12px;text-transform:uppercase">💾 Zapisz skrypt</button>
+      <button type="button" onclick="przelaczEdytorSkryptu()" style="background:none;border:2px solid #232b3a;color:#8b98ad;font-weight:700;padding:8px 16px;font-size:12px">Zamknij</button>
+      <span id="infoEdytora" style="font-size:12px;color:#8b98ad"></span>
+    </div>
+  </div>
+
+  <!-- 4 KARTY STATYSTYK -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;padding:6px 30px 18px">
+    <div style="background:#ff8a3d;color:#0a0c10;border-radius:18px;padding:20px 22px 18px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:12px;font-weight:700">Boty w grze</div>
+      <div style="display:flex;align-items:baseline;gap:4px;line-height:.82">
+        <span id="statWGrze" style="font-size:72px;font-weight:800;letter-spacing:-.06em">0</span>
+        <span id="statMax" style="font-size:26px;font-weight:600;opacity:.55">/20</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="height:8px;border-radius:999px;background:rgba(10,12,16,.28);overflow:hidden">
+          <div id="pasekZapelnienia" style="height:100%;border-radius:999px;width:0%;background:#35d07f"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600">
+          <span id="statWszystkich">0 we flocie</span>
+          <span id="statProcent">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(160deg,#141a23,#0f131a);border:1px solid #1a2130;border-radius:18px;padding:20px 22px 18px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:12px;font-weight:700;color:#8b98ad">Kolejka</div>
+      <div id="statWKolejce" style="font-size:56px;font-weight:800;letter-spacing:-.05em;line-height:.82">0</div>
+      <div id="stopkaKolejki" style="font-size:12px;color:#8b98ad">pusta</div>
+    </div>
+
+    <div style="background:linear-gradient(160deg,#141a23,#0f131a);border:1px solid #1a2130;border-radius:18px;padding:20px 22px 18px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:12px;font-weight:700;color:#8b98ad">Pula nicków</div>
+      <div id="statPula" style="font-size:56px;font-weight:800;letter-spacing:-.05em;line-height:.82">0</div>
+      <div style="font-size:12px;color:#8b98ad">dostępne konta w nicki.txt</div>
+    </div>
+
+    <div style="background:linear-gradient(160deg,#141a23,#0f131a);border:1px solid #1a2130;border-radius:18px;padding:20px 22px 18px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:12px;font-weight:700;color:#8b98ad">Proxy SOCKS5</div>
+      <div id="statProxy" style="font-size:56px;font-weight:800;letter-spacing:-.05em;line-height:.82;color:#ffc93c">0</div>
+      <div id="stopkaProxy" style="font-size:12px;color:#ffc93c;font-weight:700">brak — wchodzą z lokalnego IP</div>
+    </div>
+  </div>
+
+  <!-- PASEK AKTYWNEJ KOLEJKI -->
+  <div id="pasekKolejkiBox" class="ukryte" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 30px 18px;padding:12px 20px;border-radius:999px;background:#11151c">
+    <span style="font-size:12px;font-weight:700;color:#ffc93c">Następny w kolejce:</span>
+    <span id="nastepnyNick" class="mono" style="font-size:13px">-</span>
+    <span id="nastepneZaS" style="font-size:24px;font-weight:800;color:#ffc93c;line-height:1">0s</span>
+    <span style="font-size:12px;color:#5a6678">jedno wejście na raz z odstępem — chroni przed blokadą anty-bot IP</span>
+  </div>
+
+  <!-- GŁÓWNY PANEL STEROWANIA FLOTĄ, KOMENDAMI I SKRYPTEM DYŃ -->
+  <div style="margin:0 30px 18px;border-radius:18px;background:#0e1219;border:1px solid #161c27">
+    <!-- Wiersz 1: Losowanie nowych kont -->
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 20px;border-bottom:1px solid #1a202b">
+      <span style="color:#8b98ad;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-right:4px">🎲 Nowe konta</span>
+      <span style="color:#5a6678;font-size:11px;text-transform:uppercase">od</span>
+      <input id="losOd" type="number" value="1" min="1" class="mono" style="width:58px;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:6px;font-size:14px;text-align:center">
+      <span style="color:#5a6678;font-size:11px;text-transform:uppercase">do</span>
+      <input id="losDo" type="number" value="16" min="1" class="mono" style="width:58px;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:6px;font-size:14px;text-align:center">
+      <button id="btnPrzelosuj" type="button" onclick="przelosuj()" style="background:none;border:2px solid #ffc93c;color:#ffc93c;font-weight:800;padding:7px 14px;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Przelosuj</button>
+      <button id="btnCofnij" type="button" onclick="cofnijLosowanie()" class="ukryte" style="background:none;border:2px solid #8b98ad;color:#8b98ad;font-weight:800;padding:7px 14px;font-size:12px;letter-spacing:.1em;text-transform:uppercase">↩ Cofnij zmianę</button>
+      <span style="color:#5a6678;font-size:11px">świeże nicki z nicki.txt · proxy slotu zostaje · kliknij 2× aby potwierdzić</span>
+    </div>
+
+    <!-- Wiersz 2: Wpuszczanie i rozłączanie botów -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid #1a202b">
+      <input id="inputNick" class="mono" placeholder="nick lub puste = kolejny slot" onkeydown="if(event.key==='Enter')wpusc()" style="background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:9px 12px;font-size:13px;flex:0 1 230px;min-width:150px">
+      <button type="button" onclick="wpusc()" style="background:#ff8a3d;border:2px solid #ff8a3d;color:#0a0c10;font-weight:800;padding:9px 18px;font-size:12px;letter-spacing:.14em;text-transform:uppercase">▶ Wpuść bota</button>
+      <span style="display:inline-flex;align-items:center;gap:6px">
+        <span style="color:#5a6678;font-size:11px;text-transform:uppercase">od</span>
+        <input id="zakresOd" type="number" value="1" min="1" class="mono" style="width:58px;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 6px;font-size:14px;text-align:center">
+        <span style="color:#5a6678;font-size:11px;text-transform:uppercase">do</span>
+        <input id="zakresDo" type="number" value="20" min="1" class="mono" style="width:58px;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 6px;font-size:14px;text-align:center">
+        <button type="button" onclick="wpuscZakres()" style="background:none;border:2px solid #ff8a3d;color:#ff8a3d;font-weight:800;padding:9px 16px;font-size:12px;letter-spacing:.14em;text-transform:uppercase">▶ Wpuść zakres</button>
+      </span>
+      <button type="button" onclick="rozlaczWszystkie()" style="background:none;border:2px solid #232b3a;color:#ff5c5c;font-weight:800;padding:9px 16px;font-size:12px;letter-spacing:.14em;text-transform:uppercase">■ Rozłącz wszystkie</button>
+      <div id="poleKomunikatu" style="flex:1 1 180px;font-size:12px;font-weight:700"></div>
+    </div>
+
+    <!-- Wiersz 3: Sterowanie Skryptem (Farma Dyń / Własny) + Komendy Czat -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 20px">
+      <span style="font-size:12px;color:#35d07f;font-weight:800">🎃 Skrypt:</span>
+      <select id="wyborSkryptuGlobal" style="background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:8px 12px;font-size:13px">
+        <option value="nagrody">Darmowe Nagrody (/darmowenagrody)</option>
+        <option value="dynie">Farma Dyń (dynie.js)</option>
+        <option value="wlasny">Własny skrypt (wlasny.js)</option>
+      </select>
+      <button type="button" onclick="skryptWszyscy('start')" style="background:#35d07f;border:2px solid #35d07f;color:#0a0c10;font-weight:800;padding:8px 14px;font-size:12px;text-transform:uppercase">▶ Odpal skrypt (wszystkie)</button>
+      <button type="button" onclick="skryptWszyscy('stop')" style="background:none;border:2px solid #ff5c5c;color:#ff5c5c;font-weight:800;padding:8px 14px;font-size:12px;text-transform:uppercase">⏹ Wyłącz skrypt (wszystkie)</button>
+
+      <span style="width:1px;height:26px;background:#1b2130;margin:0 6px"></span>
+
+      <span style="font-size:12px;color:#5a6678">Komenda</span>
+      <input id="inputKomenda" class="mono" placeholder="/spawn lub wiadomość" onkeydown="if(event.key==='Enter')wyslijKomende()" style="background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:9px 12px;font-size:13px;flex:1 1 180px;min-width:140px">
+      <select id="wyborCeluKomendy" style="background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:9px 12px;font-size:13px">
+        <option value="">→ wszystkie boty</option>
+      </select>
+      <button type="button" onclick="wyslijKomende()" style="background:none;border:2px solid #e6edf7;color:#e6edf7;font-weight:800;padding:9px 18px;font-size:12px;letter-spacing:.14em;text-transform:uppercase">Wyślij</button>
+    </div>
+  </div>
+
+  <!-- SEKCJA PROXY SOCKS5 -->
+  <div style="margin:0 30px 18px;border-radius:18px;background:#0e1219;border:1px solid #161c27;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px 20px;border-bottom:1px solid #1b2130">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <span style="font-size:15px;font-weight:800">Proxy SOCKS5</span>
+        <span style="font-size:12px;color:#5a6678">Obsługuje formaty: <code class="mono" style="color:#8b98ad">ip:port:user:haslo</code> oraz <code class="mono" style="color:#8b98ad">user:haslo@ip:port</code></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button id="btnTestujProxy" type="button" onclick="testujWszystkieProxy()" style="background:#151a23;border:none;border-radius:999px;color:#8b98ad;padding:7px 15px;font-size:12px;font-weight:700">Testuj wszystkie</button>
+        <button id="btnPokazDodajProxy" type="button" onclick="przelaczDodawanieProxy()" style="background:#ff8a3d;border:none;border-radius:999px;color:#0a0c10;padding:7px 15px;font-size:12px;font-weight:800">+ Dodaj proxy</button>
+      </div>
+    </div>
+
+    <div id="boxDodawaniaProxy" class="ukryte" style="display:flex;flex-direction:column;gap:10px;padding:16px 20px;border-bottom:1px solid #1b2130;background:#0b0f15">
+      <div style="font-size:12px;color:#8b98ad">Wklej zakupione proxy SOCKS5 — jedno w każdym wierszu (<span class="mono" style="color:#e6edf7">host:port:user:hasło</span>, <span class="mono" style="color:#e6edf7">user:hasło@host:port</span> lub <span class="mono" style="color:#e6edf7">socks5://...</span>):</div>
+      <textarea id="textareaNoweProxy" rows="4" class="mono" placeholder="91.149.251.49:12324:uzytkownik:haslo" style="background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:10px 12px;font-size:13px;resize:vertical"></textarea>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button type="button" onclick="dodajProxy()" style="background:#ff8a3d;border:2px solid #ff8a3d;color:#0a0c10;font-weight:800;padding:8px 18px;font-size:12px;text-transform:uppercase">+ Zapisz i dodaj</button>
+        <span style="font-size:12px;color:#5a6678">Po dodaniu kliknij „Testuj wszystkie", aby sprawdzić ping do serwera Minecraft.</span>
+      </div>
+    </div>
+
+    <div id="kontenerKartProxy" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;padding:16px 20px"></div>
+
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid #1b2130">
+      <span style="color:#8b98ad;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase">Przypisz konta</span>
+      <span style="color:#5a6678;font-size:11px;text-transform:uppercase">od</span>
+      <input id="przOd" type="number" value="1" min="1" class="mono" style="width:58px;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:6px;font-size:14px;text-align:center">
+      <span style="color:#5a6678;font-size:11px;text-transform:uppercase">do</span>
+      <input id="przDo" type="number" value="15" min="1" class="mono" style="width:58px;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:6px;font-size:14px;text-align:center">
+      <span style="color:#5a6678;font-size:13px">→</span>
+      <select id="przNrProxy" style="background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:6px 10px;font-size:13px">
+        <option value="0">auto (równo)</option>
+      </select>
+      <button type="button" onclick="przypiszProxyZakres()" style="background:none;border:2px solid #ff8a3d;color:#ff8a3d;font-weight:800;padding:7px 14px;font-size:12px;text-transform:uppercase">Przypisz</button>
+      <span style="flex:1 1 20px"></span>
+      <span style="color:#5a6678;font-size:11px;text-transform:uppercase">liczba slotów</span>
+      <input id="inputMaxKont" type="number" value="20" min="1" class="mono" style="width:68px;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:6px;font-size:14px;text-align:center">
+      <button type="button" onclick="zapiszMaxKont()" style="background:#151a23;border:none;border-radius:999px;color:#8b98ad;padding:7px 15px;font-size:12px;font-weight:700">Zapisz</button>
+    </div>
+  </div>
+
+  <!-- TABELA FLOTY + DZIENNIK LOGÓW -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;padding:0 30px 30px">
+
+    <!-- Tabela Floty -->
+    <div style="background:#0e1219;border:1px solid #161c27;border-radius:18px;min-width:0;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;border-bottom:1px solid #1b2130">
+        <span style="font-size:15px;font-weight:800">Flota Botów</span>
+        <span id="licznikFloty" style="font-size:12px;color:#5a6678">0 / 20</span>
+      </div>
+      <div class="om-scroll" style="max-height:480px;overflow:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:680px">
+          <thead>
+            <tr style="position:sticky;top:0;background:#11151c;z-index:2">
+              <th style="text-align:left;padding:11px 14px;font-size:11px;color:#8b98ad;border-bottom:1px solid #1b2130">Bot</th>
+              <th style="text-align:left;padding:11px 14px;font-size:11px;color:#8b98ad;border-bottom:1px solid #1b2130">Stan</th>
+              <th style="text-align:left;padding:11px 14px;font-size:11px;color:#8b98ad;border-bottom:1px solid #1b2130">Skrypt (Dynie)</th>
+              <th style="text-align:left;padding:11px 14px;font-size:11px;color:#8b98ad;border-bottom:1px solid #1b2130">Pozycja</th>
+              <th style="text-align:left;padding:11px 14px;font-size:11px;color:#8b98ad;border-bottom:1px solid #1b2130">Czas</th>
+              <th style="text-align:left;padding:11px 14px;font-size:11px;color:#8b98ad;border-bottom:1px solid #1b2130">Proxy</th>
+              <th style="border-bottom:1px solid #1b2130"></th>
+            </tr>
+          </thead>
+          <tbody id="tabelaBotowBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dziennik Logów -->
+    <div style="background:#07090c;border-radius:18px;min-width:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid #161c27">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px 11px 20px;border-bottom:1px solid #1b2130">
+        <span style="font-size:15px;font-weight:800">Dziennik zdarzeń</span>
+        <button id="btnPauzaLogow" type="button" onclick="przelaczPauzeLogow()" style="background:#151a23;border:none;border-radius:999px;color:#8b98ad;padding:6px 15px;font-size:12px;font-weight:700">Pauza</button>
+      </div>
+      <div id="kontenerLogow" class="om-scroll mono" style="max-height:480px;min-height:260px;overflow:auto;padding:8px 0;font-size:12px;line-height:1.55"></div>
+    </div>
+
+  </div>
+
+  <!-- MODAL PODGLĄDU EKRANU MINECRAFT 3D NA ŻYWO -->
+  <div id="modalPodgladu" class="ukryte" style="position:fixed;inset:0;background:rgba(5,7,10,.88);display:flex;align-items:center;justify-content:center;padding:18px;z-index:55">
+    <div style="background:#0e1219;border:1px solid #232b3a;border-radius:20px;width:min(1260px,100%);max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.65)">
+      <!-- Pasek górny podglądu -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid #1b2130;background:#11151c">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="background:#5aa9ff;color:#0a0c10;font-weight:800;font-size:12px;padding:4px 10px;border-radius:999px">👁️ EKRAN GRY 3D</span>
+          <span id="tytulPodgladu" class="mono" style="font-weight:800;font-size:16px">Bot #1</span>
+          <span id="statyPodgladu" class="mono" style="font-size:12px;color:#8b98ad"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <button type="button" onclick="przelaczTrybKamery(true)" style="background:#151a23;border:1px solid #232b3a;border-radius:999px;color:#e6edf7;padding:6px 12px;font-size:12px;font-weight:700">🎥 Oczy bota (1st Person)</button>
+          <button type="button" onclick="przelaczTrybKamery(false)" style="background:#151a23;border:1px solid #232b3a;border-radius:999px;color:#8b98ad;padding:6px 12px;font-size:12px;font-weight:700">🛸 Wolna kamera (3rd Person)</button>
+          <a id="linkPelnyEkran3D" href="http://localhost:3001" target="_blank" style="background:#151a23;border:1px solid #232b3a;border-radius:999px;color:#ff8a3d;padding:6px 12px;font-size:12px;font-weight:700;text-decoration:none">↗ Otwórz w nowej karcie</a>
+          <button type="button" onclick="zamknijModalPodgladu()" style="background:#ff5c5c;border:none;border-radius:999px;color:#0a0c10;padding:6px 14px;font-size:12px;font-weight:800">✕ Zamknij</button>
+        </div>
+      </div>
+
+      <!-- Środek: Obraz 3D + Panel sterowania i GUI po prawej -->
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:0;min-height:540px;flex:1;overflow:hidden">
+        <div style="position:relative;background:#05070a;min-height:480px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px">
+          <iframe id="iframePodgladu3D" src="about:blank" style="width:100%;height:100%;border:0;display:block;position:absolute;inset:0"></iframe>
+
+          <!-- Pełna ściana map 8x4 (1024x512) dla kodów z mapy na serwerze -->
+          <div id="boxScianyMap" class="ukryte" style="position:relative;z-index:5;background:#11151c;border:2px solid #ff8a3d;border-radius:16px;padding:14px 16px;box-shadow:0 20px 50px rgba(0,0,0,.85);max-width:100%;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <span style="font-size:13px;font-weight:800;color:#ff8a3d">🗺️ Ekran mapy z serwera (8×4 kafelki · 1024×512 px)</span>
+              <button type="button" onclick="document.getElementById('boxScianyMap').classList.add('ukryte')" style="background:#151a23;border:1px solid #232b3a;color:#8b98ad;padding:3px 10px;font-size:11px;border-radius:999px">Ukryj mapę</button>
+            </div>
+            <canvas id="canvasScianyMap" width="1024" height="512" style="width:100%;max-width:760px;height:auto;aspect-ratio:2/1;image-rendering:pixelated;background:#000;border-radius:10px;border:1px solid #232b3a"></canvas>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <span style="font-size:12px;color:#8b98ad;font-weight:700">Szybki /register z kodem:</span>
+              <input id="inputSzybkiKodMapy" class="mono" placeholder="Wpisz kod z obrazka powyżej..." onkeydown="if(event.key==='Enter')wyslijSzybkiRegister()" style="flex:1;min-width:180px;background:#07090c;border:2px solid #ff8a3d;color:#e6edf7;padding:8px 12px;font-size:14px;font-weight:700">
+              <button type="button" onclick="wyslijSzybkiRegister()" style="background:#ff8a3d;border:none;color:#0a0c10;font-weight:800;padding:9px 16px;font-size:12px;text-transform:uppercase">Zarejestruj bota</button>
+            </div>
+          </div>
+
+          <!-- Nakładka pojedynczej mapy 128x128 -->
+          <div id="boxMapy128" class="ukryte" style="position:absolute;bottom:16px;left:16px;z-index:6;background:#11151c;border:2px solid #ff8a3d;border-radius:12px;padding:10px;box-shadow:0 10px 30px rgba(0,0,0,.7)">
+            <div style="font-size:11px;font-weight:800;color:#ff8a3d;margin-bottom:6px">🗺️ Mapa w ręce bota (128×128)</div>
+            <canvas id="canvasMapy128" width="256" height="256" style="width:200px;height:200px;image-rendering:pixelated;background:#000;border-radius:6px"></canvas>
+          </div>
+        </div>
+
+        <!-- Prawa kolumna: Sterowanie ruchem, Czat, Otwarte GUI (np. Kompas/Nagrody) i Ekwipunek -->
+        <div class="om-scroll" style="background:#0b0e14;border-left:1px solid #1b2130;padding:14px;display:flex;flex-direction:column;gap:14px;overflow-y:auto">
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#8b98ad;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">🎮 Ruch i akcje bota</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center">
+              <div></div>
+              <button type="button" onclick="klikBota('move',0,'forward')" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:8px;font-weight:800">▲ Przód</button>
+              <div></div>
+              <button type="button" onclick="klikBota('move',0,'left')" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:8px;font-weight:800">◄ Lewo</button>
+              <button type="button" onclick="klikBota('jump',0)" style="background:#ff8a3d;border:none;color:#0a0c10;padding:8px;font-weight:800">⤒ Skok</button>
+              <button type="button" onclick="klikBota('move',0,'right')" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:8px;font-weight:800">Prawo ►</button>
+              <div></div>
+              <button type="button" onclick="klikBota('move',0,'back')" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:8px;font-weight:800">▼ Tył</button>
+              <div></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#8b98ad;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">🧭 Pasek szybki (PPM - użyj np. kompasu)</div>
+            <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:4px">
+              <button type="button" onclick="klikBota('hotbar',0)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">1</button>
+              <button type="button" onclick="klikBota('hotbar',1)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">2</button>
+              <button type="button" onclick="klikBota('hotbar',2)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">3</button>
+              <button type="button" onclick="klikBota('hotbar',3)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">4</button>
+              <button type="button" onclick="klikBota('hotbar',4)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">5</button>
+              <button type="button" onclick="klikBota('hotbar',5)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">6</button>
+              <button type="button" onclick="klikBota('hotbar',6)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">7</button>
+              <button type="button" onclick="klikBota('hotbar',7)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">8</button>
+              <button type="button" onclick="klikBota('hotbar',8)" style="background:#151a23;border:1px solid #232b3a;color:#e6edf7;padding:6px 0;font-size:11px;font-weight:700">9</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#8b98ad;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">💬 Wyślij komendę z tego bota</div>
+            <div style="display:flex;gap:6px">
+              <input id="inputKomendaPodglad" class="mono" placeholder="/login lub /darmowenagrody" onkeydown="if(event.key==='Enter')wyslijKomendeZPodgladu()" style="flex:1;background:#11151c;border:1px solid #232b3a;color:#e6edf7;padding:7px 10px;font-size:12px">
+              <button type="button" onclick="wyslijKomendeZPodgladu()" style="background:#35d07f;border:none;color:#0a0c10;font-weight:800;padding:7px 12px;font-size:12px">Wyślij</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#ffc93c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">📦 Otwarte menu GUI (Kliknij aby wybrać)</div>
+            <div id="boxOknaGUI" class="mono" style="background:#11151c;border:1px solid #1b2130;border-radius:10px;padding:8px;font-size:11px;color:#8b98ad;max-height:160px;overflow-y:auto">Brak otwartego menu GUI</div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#8b98ad;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">🎒 Ekwipunek bota</div>
+            <div id="boxEkwipunku" class="mono" style="background:#11151c;border:1px solid #1b2130;border-radius:10px;padding:8px;font-size:11px;color:#8b98ad;max-height:150px;overflow-y:auto">Pusty</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EKRAN LOGOWANIA (BRAMA) -->
+<div id="ekranLogowania" style="position:fixed;inset:0;background:#0a0c10;display:flex;align-items:stretch;z-index:60">
+  <div style="flex:1 1 0;max-width:520px;margin:auto;padding:32px;width:100%">
+    <div style="background:#ff8a3d;color:#0a0c10;width:58px;height:58px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;margin-bottom:24px">FL</div>
+    <div style="font-size:38px;font-weight:800;letter-spacing:-.04em;line-height:1.05;margin-bottom:8px">Flota Botów</div>
+    <div style="font-size:13px;color:#5a6678;margin-bottom:28px">Panel sterowania botami · Proxy SOCKS5 · Skrypt na Dynie</div>
+    <div style="font-size:12px;color:#8b98ad;margin-bottom:8px">Hasło (domyślnie: <code class="mono" style="color:#ff8a3d">admin123</code>)</div>
+    <input id="inputHasloPanelu" type="password" class="mono" placeholder="••••••••" onkeydown="if(event.key==='Enter')zaloguj()" style="width:100%;background:#11151c;border:2px solid #232b3a;color:#e6edf7;padding:12px 14px;font-size:16px;margin-bottom:16px">
+    <button type="button" onclick="zaloguj()" style="background:#ff8a3d;border:2px solid #ff8a3d;color:#0a0c10;font-weight:800;padding:12px 22px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;width:100%">Wejdź do panelu</button>
+    <div id="bladLogowania" style="margin-top:14px;font-size:13px;color:#ff5c5c;min-height:20px"></div>
+  </div>
+</div>
+
+<script>
+  const ZIELONY = '#35d07f', ZOLTY = '#ffc93c', CZERWONY = '#ff5c5c', NIEBIESKI = '#5aa9ff';
+  let haslo = localStorage.getItem('flota_haslo') || '';
+  let ostatniStan = null;
+  let celKolejkiMs = 0;
+  let pauzaLogow = false;
+  let uzbrojonyPrzycisk = null;
+  let uzbrojonyTimer = null;
+  let aktualnyPlikSkryptu = 'dynie';
+  let podgladSlotNr = 0;
+  let podgladNick = '';
+  let timerOdswiezPodglad = null;
+
+  async function otworzPodglad3D(slotNr, nick, fp = true) {
+    podgladSlotNr = slotNr;
+    podgladNick = nick;
+    const d = await akcja(`/api/podglad?slot=${slotNr}&fp=${fp ? '1' : '0'}`);
+    if (!d || !d.ok) return;
+
+    document.getElementById('tytulPodgladu').textContent = `#${slotNr} · ${nick}`;
+    document.getElementById('modalPodgladu').classList.remove('ukryte');
+    const ifr = document.getElementById('iframePodgladu3D');
+    if (d.url) {
+      const urlMobilny = d.url.replace('localhost', window.location.hostname);
+      ifr.src = urlMobilny + '?t=' + Date.now();
+      document.getElementById('linkPelnyEkran3D').href = urlMobilny;
+    } else {
+      ifr.src = 'about:blank';
+    }
+
+    odswiezDaneEkranuBota();
+    clearInterval(timerOdswiezPodglad);
+    timerOdswiezPodglad = setInterval(odswiezDaneEkranuBota, 1200);
+  }
+
+  function przelaczTrybKamery(fp) {
+    if (!podgladSlotNr) return;
+    otworzPodglad3D(podgladSlotNr, podgladNick, fp);
+  }
+
+  function zamknijModalPodgladu() {
+    clearInterval(timerOdswiezPodglad);
+    document.getElementById('modalPodgladu').classList.add('ukryte');
+    document.getElementById('iframePodgladu3D').src = 'about:blank';
+  }
+
+  async function odswiezDaneEkranuBota() {
+    if (!podgladSlotNr) return;
+    try {
+      const r = await fetch(`/api/bot-ekran?slot=${podgladSlotNr}`, { headers: naglowki() });
+      const d = await r.json();
+      if (!d.ok) return;
+
+      const p = d.pozycja ? `X:${d.pozycja.x} Y:${d.pozycja.y} Z:${d.pozycja.z}` : 'brak pozycji';
+      document.getElementById('statyPodgladu').textContent = `❤️ ${Math.round(d.health || 20)}/20 · 🍗 ${Math.round(d.food || 20)}/20 · 📍 ${p}`;
+
+      if (d.podgladUrl) {
+        const urlMobilny = d.podgladUrl.replace('localhost', window.location.hostname);
+        const ifr = document.getElementById('iframePodgladu3D');
+        if (!ifr.src || ifr.src === 'about:blank' || !ifr.src.startsWith(urlMobilny)) {
+          ifr.src = urlMobilny + '?t=' + Date.now();
+          document.getElementById('linkPelnyEkran3D').href = urlMobilny;
+        }
+      }
+
+      const guiEl = document.getElementById('boxOknaGUI');
+      if (d.okno && d.okno.items && d.okno.items.length) {
+        guiEl.innerHTML = `<div style="color:#e6edf7;font-weight:700;margin-bottom:6px">${d.okno.title}</div>` +
+          d.okno.items.map(it =>
+            `<button type="button" onclick="klikBota('window',${it.slot})" style="display:block;width:100%;text-align:left;background:#151a23;border:1px solid #232b3a;color:#ffc93c;padding:4px 8px;margin-bottom:4px;font-size:11px">[Slot #${it.slot}] ${it.displayName} ×${it.count}</button>`
+          ).join('');
+      } else {
+        guiEl.textContent = 'Brak otwartego menu GUI';
+      }
+
+      const invEl = document.getElementById('boxEkwipunku');
+      if (d.ekwipunek && d.ekwipunek.length) {
+        invEl.innerHTML = d.ekwipunek.map(it =>
+          `<div style="padding:2px 0;border-bottom:1px solid #151a23">[#${it.slot}] <span style="color:#e6edf7">${it.displayName}</span> ×${it.count}</div>`
+        ).join('');
+      } else {
+        invEl.textContent = 'Pusty ekwipunek';
+      }
+
+      // Oficjalna paleta kolorów bazowych mapy Minecraft (ID 0..61)
+      const PALETA_MC = [
+        [0,0,0],[127,178,56],[247,233,163],[199,199,199],[255,0,0],[160,160,255],[167,167,167],[0,124,0],
+        [255,255,255],[164,168,184],[151,109,77],[112,112,112],[64,64,255],[143,119,72],[255,252,245],[216,127,51],
+        [178,76,216],[102,153,216],[229,229,51],[127,204,25],[242,127,165],[76,76,76],[153,153,153],[76,127,153],
+        [127,63,178],[51,76,178],[102,76,51],[102,127,51],[153,51,51],[25,25,25],[250,238,77],[92,219,213],
+        [74,128,255],[0,217,58],[129,86,49],[112,2,0],[209,177,161],[159,82,36],[149,87,108],[112,108,138],
+        [186,133,36],[103,117,53],[160,77,78],[57,41,35],[135,107,98],[87,92,92],[122,73,88],[76,62,92],
+        [76,50,35],[76,82,42],[142,60,46],[37,22,16],[189,48,49],[148,63,97],[92,25,29],[22,126,134],
+        [58,142,140],[86,44,62],[20,180,133],[100,100,100],[216,175,147],[127,167,150]
+      ];
+      function kolorMapyMC(cid) {
+        const c = cid & 0xff;
+        const base = c >> 2;
+        if (base === 0) return [18, 18, 24];
+        const rgb = PALETA_MC[base] || [200, 200, 200];
+        const m = [180, 220, 255, 135][c & 3] || 220;
+        return [(rgb[0] * m) / 255, (rgb[1] * m) / 255, (rgb[2] * m) / 255];
+      }
+
+      window._ostatnieHasloKont = d.hasloKont || 'HasloBotow123!';
+
+      // Renderowanie pełnej ściany map 8x4 (1024x512) z serwera
+      const scianaBox = document.getElementById('boxScianyMap');
+      if (d.maScianeMap && d.scianaMap) {
+        scianaBox.classList.remove('ukryte');
+        const cvs = document.getElementById('canvasScianyMap');
+        const ctx = cvs.getContext('2d');
+        for (const [klucz, b64] of Object.entries(d.scianaMap)) {
+          const [colStr, rowStr] = klucz.split('_');
+          const col = parseInt(colStr, 10), row = parseInt(rowStr, 10);
+          if (isNaN(col) || isNaN(row)) continue;
+          const raw = atob(b64);
+          if (raw.length < 16384) continue;
+          const img = ctx.createImageData(128, 128);
+          for (let i = 0; i < 16384; i++) {
+            const [r, g, b] = kolorMapyMC(raw.charCodeAt(i));
+            img.data[i * 4] = r;
+            img.data[i * 4 + 1] = g;
+            img.data[i * 4 + 2] = b;
+            img.data[i * 4 + 3] = 255;
+          }
+          ctx.putImageData(img, col * 128, row * 128);
+        }
+      } else {
+        scianaBox.classList.add('ukryte');
+      }
+
+      // Renderowanie pojedynczej mapy 128x128 jeśli serwer przysłał pakiet mapy
+      const mapBox = document.getElementById('boxMapy128');
+      if (!d.maScianeMap && d.mapa128 && d.mapa128.length === 16384) {
+        mapBox.classList.remove('ukryte');
+        const cvs = document.getElementById('canvasMapy128');
+        const ctx = cvs.getContext('2d');
+        const img = ctx.createImageData(128, 128);
+        for (let i = 0; i < 16384; i++) {
+          const [r, g, b] = kolorMapyMC(d.mapa128[i]);
+          img.data[i * 4] = r;
+          img.data[i * 4 + 1] = g;
+          img.data[i * 4 + 2] = b;
+          img.data[i * 4 + 3] = 255;
+        }
+        const tmp = document.createElement('canvas');
+        tmp.width = 128; tmp.height = 128;
+        tmp.getContext('2d').putImageData(img, 0, 0);
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(tmp, 0, 0, 256, 256);
+      } else {
+        mapBox.classList.add('ukryte');
+      }
+    } catch (e) {}
+  }
+
+  async function klikBota(akcjaTyp, nr = 0, kierunek = 'forward') {
+    if (!podgladSlotNr) return;
+    await akcja(`/api/bot-klik?slot=${podgladSlotNr}&akcja=${akcjaTyp}&nr=${nr}&kierunek=${kierunek}`);
+    setTimeout(odswiezDaneEkranuBota, 400);
+  }
+
+  async function wyslijKomendeZPodgladu() {
+    const inp = document.getElementById('inputKomendaPodglad');
+    const t = inp.value.trim();
+    if (!t || !podgladNick) return;
+    await akcja(`/api/komenda?nick=${encodeURIComponent(podgladNick)}&tekst=${encodeURIComponent(t)}`);
+    inp.value = '';
+  }
+
+  async function wyslijSzybkiRegister() {
+    const inp = document.getElementById('inputSzybkiKodMapy');
+    const kod = inp.value.trim();
+    if (!kod || !podgladNick) return;
+    const h = window._ostatnieHasloKont || 'HasloBotow123!';
+    const pelnaKomenda = `/register ${h} ${h} ${kod}`;
+    await akcja(`/api/komenda?nick=${encodeURIComponent(podgladNick)}&tekst=${encodeURIComponent(pelnaKomenda)}`);
+    inp.value = '';
+  }
+
+  if (haslo) {
+    document.getElementById('inputHasloPanelu').value = haslo;
+    zaloguj(true);
+  }
+
+  setInterval(() => {
+    if (ostatniStan && celKolejkiMs > 0) {
+      const s = Math.max(0, Math.ceil((celKolejkiMs - Date.now()) / 1000));
+      document.getElementById('nastepneZaS').textContent = s + 's';
+      if (ostatniStan.wKolejce > 0) {
+        document.getElementById('stopkaKolejki').textContent = 'następny za ' + s + 's';
+      }
+    }
+  }, 1000);
+
+  setInterval(() => {
+    if (document.getElementById('ekranLogowania').classList.contains('ukryte')) {
+      pobierzStan();
+    }
+  }, 2000);
+
+  function naglowki() {
+    return { 'x-haslo': haslo };
+  }
+
+  async function zaloguj(cicho = false) {
+    if (!cicho) haslo = document.getElementById('inputHasloPanelu').value.trim();
+    try {
+      const r = await fetch('/api/stan', { headers: naglowki() });
+      if (r.status === 401) {
+        if (!cicho) document.getElementById('bladLogowania').textContent = 'Nieprawidłowe hasło';
+        return;
+      }
+      const d = await r.json();
+      localStorage.setItem('flota_haslo', haslo);
+      document.getElementById('ekranLogowania').classList.add('ukryte');
+      wypelnijPolaSerwera(d.serwer);
+      renderuj(d);
+    } catch (e) {
+      if (!cicho) document.getElementById('bladLogowania').textContent = 'Brak połączenia z serwerem Node.js';
+    }
+  }
+
+  function wyloguj() {
+    localStorage.removeItem('flota_haslo');
+    haslo = '';
+    document.getElementById('ekranLogowania').classList.remove('ukryte');
+  }
+
+  async function pobierzStan() {
+    try {
+      const r = await fetch('/api/stan', { headers: naglowki() });
+      if (r.status === 401) { wyloguj(); return; }
+      const d = await r.json();
+      renderuj(d);
+    } catch (e) {
+      document.getElementById('kropkaStanu').style.background = CZERWONY;
+      document.getElementById('etykietaStanu').textContent = 'brak łączności';
+    }
+  }
+
+  async function akcja(url, body = null) {
+    try {
+      const opcje = { method: 'POST', headers: naglowki() };
+      if (body !== null) opcje.body = typeof body === 'string' ? body : JSON.stringify(body);
+      const r = await fetch(url, opcje);
+      const d = await r.json();
+      pokazKomunikat(d.wiadomosc || d.powod || (d.ok ? 'OK' : 'Błąd'), !!d.ok);
+      pobierzStan();
+      return d;
+    } catch (e) {
+      pokazKomunikat('Błąd połączenia z panelem', false);
+      return null;
+    }
+  }
+
+  let timerKom;
+  function pokazKomunikat(tekst, ok) {
+    const el = document.getElementById('poleKomunikatu');
+    el.textContent = tekst;
+    el.style.color = ok ? ZIELONY : CZERWONY;
+    clearTimeout(timerKom);
+    timerKom = setTimeout(() => { el.textContent = ''; }, 6000);
+  }
+
+  // ─── AKCJE UŻYTKOWNIKA ─────────────────────────────────────────────────────
+  function przelaczKonfigSerwera() {
+    const el = document.getElementById('panelSerwera');
+    el.classList.toggle('ukryte');
+    if (!el.classList.contains('ukryte') && ostatniStan && ostatniStan.serwer) {
+      wypelnijPolaSerwera(ostatniStan.serwer);
+    }
+  }
+
+  function wypelnijPolaSerwera(srv) {
+    if (!srv) return;
+    document.getElementById('srvHost').value = srv.host || '';
+    document.getElementById('srvPort').value = srv.port || 25565;
+    document.getElementById('srvWersja').value = srv.wersja || '';
+    document.getElementById('srvHaslo').value = srv.hasloKont || '';
+    document.getElementById('srvKomenda').value = srv.komendaWejscia || '';
+    document.getElementById('srvOdstep').value = srv.odstepS || 15;
+  }
+
+  async function zapiszSerwer() {
+    const payload = {
+      host: document.getElementById('srvHost').value,
+      port: document.getElementById('srvPort').value,
+      wersja: document.getElementById('srvWersja').value,
+      hasloKont: document.getElementById('srvHaslo').value,
+      komendaWejscia: document.getElementById('srvKomenda').value,
+      odstepS: document.getElementById('srvOdstep').value,
+    };
+    await akcja('/api/serwer-zapisz', payload);
+    document.getElementById('panelSerwera').classList.add('ukryte');
+  }
+
+  async function przelaczEdytorSkryptu() {
+    const el = document.getElementById('panelSkryptow');
+    el.classList.toggle('ukryte');
+    if (!el.classList.contains('ukryte')) {
+      await wczytajKodSkryptu(aktualnyPlikSkryptu);
+    }
+  }
+
+  async function wczytajKodSkryptu(nazwa) {
+    aktualnyPlikSkryptu = nazwa;
+    const r = await fetch('/api/skrypt-kod?nazwa=' + nazwa, { headers: naglowki() });
+    const d = await r.json();
+    if (d.ok) {
+      document.getElementById('poleKoduSkryptu').value = d.kod;
+      document.getElementById('infoEdytora').textContent = 'Edytujesz plik: skrypty/' + d.nazwa;
+    }
+  }
+
+  async function zapiszKodSkryptu() {
+    const kod = document.getElementById('poleKoduSkryptu').value;
+    const d = await akcja('/api/skrypt-zapisz?nazwa=' + aktualnyPlikSkryptu, kod);
+    if (d && d.ok) {
+      document.getElementById('infoEdytora').textContent = '✅ Zapisano skrypty/' + aktualnyPlikSkryptu + '.js!';
+    }
+  }
+
+  async function wpusc() {
+    const inp = document.getElementById('inputNick');
+    const d = await akcja('/api/wejdz?nick=' + encodeURIComponent(inp.value.trim()));
+    if (d && d.ok) inp.value = '';
+  }
+
+  async function wpuscZakres() {
+    const od = document.getElementById('zakresOd').value;
+    const doN = document.getElementById('zakresDo').value;
+    await akcja(`/api/zakres?od=${od}&do=${doN}`);
+  }
+
+  async function rozlaczWszystkie() {
+    if (!confirm('Na pewno rozłączyć wszystkie boty?')) return;
+    await akcja('/api/wyjdz-wszyscy');
+  }
+
+  async function wyslijKomende() {
+    const inp = document.getElementById('inputKomenda');
+    const cel = document.getElementById('wyborCeluKomendy').value;
+    const t = inp.value.trim();
+    if (!t) return;
+    const url = cel
+      ? `/api/komenda?nick=${encodeURIComponent(cel)}&tekst=${encodeURIComponent(t)}`
+      : `/api/komenda-wszyscy?tekst=${encodeURIComponent(t)}`;
+    await akcja(url);
+    inp.value = '';
+  }
+
+  async function skryptWszyscy(tryb) {
+    const skrypt = document.getElementById('wyborSkryptuGlobal').value;
+    await akcja(`/api/skrypt-wszyscy?akcja=${tryb}&skrypt=${encodeURIComponent(skrypt)}`);
+  }
+
+  async function przelaczSkryptSlotu(slotNr) {
+    const skrypt = document.getElementById('wyborSkryptuGlobal').value;
+    await akcja(`/api/skrypt-przelacz?slot=${slotNr}&skrypt=${encodeURIComponent(skrypt)}`);
+  }
+
+  function uzbroj(klucz, fnOdswiez) {
+    clearTimeout(uzbrojonyTimer);
+    uzbrojonyPrzycisk = klucz;
+    if (fnOdswiez) fnOdswiez();
+    uzbrojonyTimer = setTimeout(() => {
+      uzbrojonyPrzycisk = null;
+      if (ostatniStan) renderuj(ostatniStan);
+    }, 5000);
+  }
+
+  async function przelosuj() {
+    const btn = document.getElementById('btnPrzelosuj');
+    if (uzbrojonyPrzycisk !== 'los') {
+      uzbroj('los', () => {
+        btn.textContent = '⚠ Na pewno? Kliknij 2×';
+        btn.style.background = CZERWONY;
+        btn.style.borderColor = CZERWONY;
+        btn.style.color = '#0a0c10';
+      });
+      return;
+    }
+    uzbrojonyPrzycisk = null;
+    btn.textContent = 'Przelosuj';
+    btn.style.background = 'none';
+    btn.style.borderColor = ZOLTY;
+    btn.style.color = ZOLTY;
+    const od = document.getElementById('losOd').value;
+    const doN = document.getElementById('losDo').value;
+    await akcja(`/api/przelosuj?od=${od}&do=${doN}`);
+  }
+
+  async function cofnijLosowanie() {
+    await akcja('/api/cofnij-losowanie');
+  }
+
+  function przelaczDodawanieProxy() {
+    const box = document.getElementById('boxDodawaniaProxy');
+    box.classList.toggle('ukryte');
+    document.getElementById('btnPokazDodajProxy').textContent = box.classList.contains('ukryte') ? '+ Dodaj proxy' : 'Zamknij';
+  }
+
+  async function dodajProxy() {
+    const t = document.getElementById('textareaNoweProxy').value.trim();
+    if (!t) { pokazKomunikat('Wklej najpierw adresy proxy', false); return; }
+    const d = await akcja('/api/proxy-dodaj', t);
+    if (d && d.ok) {
+      document.getElementById('textareaNoweProxy').value = '';
+      document.getElementById('boxDodawaniaProxy').classList.add('ukryte');
+      document.getElementById('btnPokazDodajProxy').textContent = '+ Dodaj proxy';
+    }
+  }
+
+  async function testujWszystkieProxy() {
+    const lista = (ostatniStan && ostatniStan.proxyLista) || [];
+    if (!lista.length) return;
+    const btn = document.getElementById('btnTestujProxy');
+    btn.textContent = 'Testuję...';
+    let ok = 0;
+    for (const p of lista) {
+      const d = await akcja('/api/proxy-test?nr=' + p.nr);
+      if (d && d.ok) ok++;
+    }
+    btn.textContent = 'Testuj wszystkie';
+    pokazKomunikat(`Test zakończony: ${ok}/${lista.length} proxy działa`, ok === lista.length);
+  }
+
+  async function przypiszProxyZakres() {
+    const od = document.getElementById('przOd').value;
+    const doN = document.getElementById('przDo').value;
+    const nr = document.getElementById('przNrProxy').value;
+    await akcja(`/api/konto-proxy?od=${od}&do=${doN}&nr=${nr}`);
+  }
+
+  async function zapiszMaxKont() {
+    const n = document.getElementById('inputMaxKont').value;
+    await akcja('/api/max?n=' + n);
+  }
+
+  function przelaczPauzeLogow() {
+    pauzaLogow = !pauzaLogow;
+    const btn = document.getElementById('btnPauzaLogow');
+    btn.textContent = pauzaLogow ? 'Wznów' : 'Pauza';
+    btn.style.color = pauzaLogow ? '#ff8a3d' : '#8b98ad';
+  }
+
+  function czasLudzko(ms) {
+    if (!ms) return '—';
+    const s = Math.floor(ms / 1000);
+    if (s < 60) return s + 's';
+    const m = Math.floor(s / 60), h = Math.floor(m / 60);
+    return h ? `${h}h ${m % 60}m` : `${m}m`;
+  }
+
+  // ─── RENDEROWANIE WIDOKU ───────────────────────────────────────────────────
+  function renderuj(d) {
+    ostatniStan = d;
+    celKolejkiMs = Date.now() + (d.nastepneZa || 0);
+
+    if (d.serwer) {
+      document.getElementById('naglowekSerwer').textContent =
+        `${d.serwer.host}:${d.serwer.port} · wersja ${d.serwer.wersja || 'auto'} · odstęp kolejki ${d.serwer.odstepS}s`;
+    }
+
+    const pct = d.max ? Math.round((d.wszystkich / d.max) * 100) : 0;
+    document.getElementById('statWGrze').textContent = d.wGrze;
+    document.getElementById('statMax').textContent = '/' + d.max;
+    document.getElementById('statWszystkich').textContent = d.wszystkich + ' we flocie';
+    document.getElementById('statProcent').textContent = pct + '%';
+    const pasek = document.getElementById('pasekZapelnienia');
+    pasek.style.width = Math.min(100, pct) + '%';
+    pasek.style.background = pct > 80 ? ZIELONY : pct >= 40 ? ZOLTY : CZERWONY;
+
+    document.getElementById('statWKolejce').textContent = d.wKolejce;
+    const zaS = Math.max(0, Math.ceil((d.nastepneZa || 0) / 1000));
+    document.getElementById('stopkaKolejki').textContent = d.wKolejce > 0 ? `następny za ${zaS}s` : 'pusta';
+
+    document.getElementById('statPula').textContent = d.pulaNickow || 0;
+    document.getElementById('statProxy').textContent = d.proxy || 0;
+    const stProxy = document.getElementById('stopkaProxy');
+    if (d.proxy > 0) {
+      document.getElementById('statProxy').style.color = '#e6edf7';
+      stProxy.style.color = '#8b98ad';
+      stProxy.textContent = `ok. ${Math.ceil(d.max / d.proxy)} kont na 1 proxy`;
+    } else {
+      document.getElementById('statProxy').style.color = ZOLTY;
+      stProxy.style.color = ZOLTY;
+      stProxy.textContent = 'brak — boty wchodzą z Twojego IP';
+    }
+
+    // Kropka stanu w nagłówku
+    const kr = document.getElementById('kropkaStanu');
+    const et = document.getElementById('etykietaStanu');
+    if (d.wGrze > 0) {
+      kr.style.background = ZIELONY;
+      kr.style.animation = 'puls 1.8s ease-in-out infinite';
+      et.textContent = d.wGrze + ' w grze';
+    } else if (d.wKolejce > 0) {
+      kr.style.background = ZOLTY;
+      kr.style.animation = 'none';
+      et.textContent = 'wchodzą...';
+    } else {
+      kr.style.background = '#5a6678';
+      kr.style.animation = 'none';
+      et.textContent = 'flota pusta';
+    }
+
+    // Pasek kolejki
+    const pKol = document.getElementById('pasekKolejkiBox');
+    if (d.wKolejce > 0) {
+      pKol.classList.remove('ukryte');
+      const nast = (d.boty || []).find(b => b.wlaczony && !b.online);
+      document.getElementById('nastepnyNick').textContent = nast ? `${nast.nick} (#${nast.slot})` : 'z puli';
+    } else {
+      pKol.classList.add('ukryte');
+    }
+
+    // Przycisk cofnij losowanie
+    const btnCof = document.getElementById('btnCofnij');
+    if (d.cofnij) {
+      btnCof.classList.remove('ukryte');
+      btnCof.textContent = `↩ Cofnij zmianę (#${d.cofnij.od}–#${d.cofnij.do})`;
+    } else {
+      btnCof.classList.add('ukryte');
+    }
+
+    // Karty Proxy SOCKS5
+    const kontenerProxy = document.getElementById('kontenerKartProxy');
+    const listaProxy = d.proxyLista || [];
+    if (listaProxy.length === 0) {
+      kontenerProxy.innerHTML = `<div style="grid-column:1/-1;padding:14px;text-align:center;color:#ffc93c;font-size:13px">Brak dodanych proxy SOCKS5 — możesz dodać je przyciskiem „+ Dodaj proxy" powyżej lub testować pojedynczego bota na własnym IP.</div>`;
+    } else {
+      kontenerProxy.innerHTML = listaProxy.map(p => {
+        const t = p.test;
+        const kropka = !t ? '#3a4454' : t.ok ? ZIELONY : CZERWONY;
+        const testTekst = !t ? 'nie testowane' : t.ok ? `✓ ${t.ms} ms` : `✗ ${t.powod}`;
+        const testKolor = !t ? '#5a6678' : t.ok ? ZIELONY : CZERWONY;
+        return `
+          <div style="background:#11151c;border-radius:14px;padding:13px 15px;display:flex;flex-direction:column;gap:8px;border:1px solid #1b2130">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span style="display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px">
+                <span style="width:8px;height:8px;border-radius:999px;background:${kropka}"></span>${p.nazwa}
+              </span>
+              <span style="font-size:11px;color:${testKolor}">${testTekst}</span>
+            </div>
+            <div class="mono" style="font-size:12px;color:#8b98ad;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.host}:${p.port}${p.user ? ' · ' + p.user : ''}</div>
+            <div style="display:flex;gap:12px;font-size:12px">
+              <span><b>${p.kont}</b> <span style="color:#5a6678">kont</span></span>
+              <span><b>${p.wlaczone}</b> <span style="color:#5a6678">włączonych</span></span>
+              <span><b style="color:#35d07f">${p.wGrze}</b> <span style="color:#5a6678">w grze</span></span>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button type="button" onclick="akcja('/api/proxy-test?nr=${p.nr}')" style="background:#151a23;border:none;border-radius:999px;color:#8b98ad;padding:5px 12px;font-size:11px;font-weight:700">Testuj</button>
+              <button type="button" onclick="akcja('/api/proxy-usun?nr=${p.nr}')" style="background:#151a23;border:none;border-radius:999px;color:#ff5c5c;padding:5px 12px;font-size:11px;font-weight:700">Usuń</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Aktualizacja selecta proxy
+    const selProxy = document.getElementById('przNrProxy');
+    const staryWyborProxy = selProxy.value;
+    selProxy.innerHTML = `<option value="0">auto (równo)</option><option value="-1">bez proxy (Twoje IP)</option>` +
+      listaProxy.map(p => `<option value="${p.nr}">Proxy ${p.nr} (${p.host})</option>`).join('');
+    selProxy.value = staryWyborProxy || '0';
+
+    // Aktualizacja selecta celów komendy
+    const selCel = document.getElementById('wyborCeluKomendy');
+    const staryCel = selCel.value;
+    const onlineBoty = (d.boty || []).filter(b => b.online);
+    selCel.innerHTML = `<option value="">→ wszystkie boty (${onlineBoty.length})</option>` +
+      onlineBoty.map(b => `<option value="${b.nick}">${b.nick} (#${b.slot})</option>`).join('');
+    selCel.value = staryCel;
+
+    // Tabela Floty
+    document.getElementById('licznikFloty').textContent = `${d.wszystkich} / ${d.max}`;
+    const tbody = document.getElementById('tabelaBotowBody');
+    const boty = d.boty || [];
+    const oczekujaceSloty = boty.filter(b => b.wlaczony && !b.online && b.stan === 'rozłączony').map(b => b.slot);
+
+    tbody.innerHTML = boty.map(b => {
+      const czekaIdx = oczekujaceSloty.indexOf(b.slot);
+      const czyCzeka = czekaIdx !== -1;
+      let etykietaStanu = b.stan;
+      let kolor = '#3a4454';
+
+      if (b.wlaczony) {
+        if (b.online) {
+          kolor = ZIELONY;
+        } else if (czyCzeka) {
+          kolor = NIEBIESKI;
+          etykietaStanu = `w kolejce #${czekaIdx + 1}`;
+        } else if (b.stan === 'błąd' || b.stan === 'rozłączony') {
+          kolor = CZERWONY;
+        } else {
+          kolor = ZOLTY;
+        }
+      }
+
+      const poz = b.pozycja ? `${b.pozycja.x.toFixed(1)} / ${b.pozycja.y.toFixed(0)} / ${b.pozycja.z.toFixed(1)}` : '—';
+      const czas = b.wlaczony ? czasLudzko(b.czas) : '—';
+      const przygas = b.wlaczony ? '1' : '.45';
+
+      const opcjeProxySlotu = [
+        `<option value="0" ${!b.proxyReczne ? 'selected' : ''}>${b.proxyNr && !b.proxyReczne ? 'auto · P' + b.proxyNr : 'auto'}</option>`,
+        `<option value="-1" ${b.proxyReczne && b.proxyNr === -1 ? 'selected' : ''}>bez proxy (Twoje IP)</option>`,
+        ...listaProxy.map(p => `<option value="${p.nr}" ${b.proxyReczne && b.proxyNr === p.nr ? 'selected' : ''}>Proxy ${p.nr}</option>`)
+      ].join('');
+
+      return `
+        <tr>
+          <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;font-weight:700">
+            <span style="display:inline-flex;align-items:center;gap:9px;opacity:${przygas}">
+              <span style="width:7px;height:7px;border-radius:999px;background:${kolor}"></span>
+              <span style="color:#5a6678;min-width:26px">#${b.slot}</span>${b.nick}
+            </span>
+          </td>
+          <td style="padding:10px 14px;border-bottom:1px solid #151a23">
+            <span style="display:inline-block;padding:3px 11px;border-radius:999px;font-size:11px;font-weight:700;color:#0a0c10;background:${kolor}">${etykietaStanu}</span>
+            ${b.blad ? `<div style="font-size:11px;color:#ff5c5c;margin-top:4px;max-width:220px">${b.blad}</div>` : ''}
+          </td>
+          <td style="padding:10px 14px;border-bottom:1px solid #151a23">
+            <button type="button" onclick="przelaczSkryptSlotu(${b.slot})" ${!b.online ? 'disabled' : ''}
+              style="background:${b.skryptAktywny ? '#35d07f' : '#151a23'};color:${b.skryptAktywny ? '#0a0c10' : '#8b98ad'};border:none;border-radius:999px;padding:5px 12px;font-size:11px;font-weight:800">
+              ${b.skryptAktywny ? '⏹ Zatrzymaj (' + b.skryptNazwa + ')' : '🎃 Odpal skrypt'}
+            </button>
+          </td>
+          <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;color:#8b98ad;font-size:12px;white-space:nowrap">${poz}</td>
+          <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;font-size:12px;white-space:nowrap">${czas}</td>
+          <td style="padding:8px 14px;border-bottom:1px solid #151a23">
+            <select onchange="akcja('/api/konto-proxy?od=${b.slot}&do=${b.slot}&nr=' + this.value)" title="${b.proxy}"
+              style="background:#11151c;border:1px solid ${b.proxyReczne ? '#ff8a3d' : '#232b3a'};color:${b.proxyReczne ? '#ff8a3d' : '#8b98ad'};padding:4px 8px;font-size:12px;border-radius:999px">
+              ${opcjeProxySlotu}
+            </select>
+          </td>
+          <td style="padding:10px 14px;border-bottom:1px solid #151a23;text-align:right;white-space:nowrap">
+            <button type="button" onclick="otworzPodglad3D(${b.slot}, '${b.nick}', true)" ${!b.online ? 'disabled' : ''}
+              title="Podgląd ekranu gry 3D na żywo (#${b.slot})"
+              style="background:#151a23;border:1px solid #232b3a;border-radius:999px;color:#5aa9ff;padding:5px 10px;font-size:11px;font-weight:800;margin-right:6px">
+              👁️ Ekran 3D
+            </button>
+            <button type="button" onclick="akcja('/api/${b.wlaczony ? 'wyjdz' : 'wejdz'}?nick=${b.slot}')"
+              title="${b.wlaczony ? 'Rozłącz #' + b.slot : 'Wpuść #' + b.slot}"
+              style="background:#151a23;border:none;border-radius:999px;color:${b.wlaczony ? '#ff5c5c' : '#35d07f'};width:30px;height:30px;font-size:12px;font-weight:800">
+              ${b.wlaczony ? '✕' : '▶'}
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    // Dziennik logów
+    if (!pauzaLogow) {
+      const logBox = document.getElementById('kontenerLogow');
+      const bylNaDole = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 60;
+      const linie = (d.dziennik || []).slice(-120);
+      logBox.innerHTML = linie.map(l => {
+        const m = /^\[(\d\d:\d\d:\d\d)\]\s?([\s\S]*)$/.exec(l) || [null, '', l];
+        const t = m[2];
+        let kolor = '#2b3444', tekstKolor = '#8b98ad', tlo = 'transparent';
+        if (/✓|✅|na spawnie|🎃/.test(t)) { kolor = ZIELONY; tekstKolor = '#cfe9db'; }
+        else if (/✗|❌|KICK|błąd/.test(t)) { kolor = CZERWONY; tekstKolor = '#ffd0d0'; tlo = 'rgba(255,92,92,.07)'; }
+        else if (/⚠️|↻|wypadł/.test(t)) { kolor = ZOLTY; tekstKolor = '#ffe9b0'; }
+        return `
+          <div style="display:flex;gap:8px;padding:3px 16px 3px 13px;margin:1px 10px;border-radius:8px;border-left:3px solid ${kolor};background:${tlo}">
+            <span style="color:#3f4a5c;flex:0 0 auto">${m[1]}</span>
+            <span style="color:${tekstKolor};word-break:break-word">${t}</span>
+          </div>
+        `;
+      }).join('');
+      if (bylNaDole) logBox.scrollTop = logBox.scrollHeight;
+    }
+  }
+</script>
+</body>
+</html>
