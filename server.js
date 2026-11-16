@@ -312,8 +312,8 @@ function wybierzProxyDlaSlotu(slotObj) {
   if (slotObj.proxyReczne && slotObj.proxyNr > 0) {
     return lista.find(p => p.nr === slotObj.proxyNr) || null;
   }
-  // Auto rozkład równomierny: (slot - 1) mod liczba_proxy
-  const idx = (slotObj.slot - 1) % lista.length;
+  // Auto rozkład równomierny (+ automatyczne przesunięcie jeśli na danym IP był limit kont):
+  const idx = ((slotObj.slot - 1) + (slotObj._przesuniecieProxy || 0)) % lista.length;
   return lista[idx] || null;
 }
 
@@ -583,6 +583,9 @@ function polaczBota(slotObj) {
     tekst = tekst.replace(/§[0-9a-fk-or]/gi, '').trim();
     rt.blad = tekst || 'Wyrzucony z serwera';
     log(`[${slotObj.nick}] KICK: ${rt.blad}`);
+    if (tekst.toLowerCase().includes('zbyt wiele kont')) {
+      slotObj._przesuniecieProxy = (slotObj._przesuniecieProxy || 0) + 1;
+    }
   });
 
   bot.on('error', (err) => {
