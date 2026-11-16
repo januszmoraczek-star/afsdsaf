@@ -19,12 +19,12 @@ try {
   for (const f of ['index.html', 'proxy.html']) {
     const src = path.join(__dirname, f);
     const dst = path.join(__dirname, 'public', f);
-    if (fs.existsSync(src) && !fs.existsSync(dst)) fs.copyFileSync(src, dst);
+    if (fs.existsSync(src)) fs.copyFileSync(src, dst);
   }
   for (const f of ['dynie.js', 'nagrody.js', 'wlasny.js']) {
     const src = path.join(__dirname, f);
     const dst = path.join(__dirname, 'skrypty', f);
-    if (fs.existsSync(src) && !fs.existsSync(dst)) fs.copyFileSync(src, dst);
+    if (fs.existsSync(src)) fs.copyFileSync(src, dst);
   }
 } catch (e) {}
 

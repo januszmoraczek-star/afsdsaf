@@ -477,13 +477,19 @@
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
 
+  let trwaPobieranieStanu = false;
   async function pobierzStan() {
+    if (trwaPobieranieStanu || document.hidden) return;
+    trwaPobieranieStanu = true;
     try {
       const r = await fetch('/api/nagrody-stan', { headers: naglowki() });
       if (r.status === 401) { wyloguj(); return; }
       const d = await r.json();
-      renderuj(d);
+      requestAnimationFrame(() => renderuj(d));
     } catch (e) {}
+    finally {
+      trwaPobieranieStanu = false;
+    }
   }
 
   let timerKom;
@@ -706,47 +712,54 @@
 
     // Select proxy
     const selPr = document.getElementById('przNrProxy');
-    const staryWybor = selPr.value;
-    selPr.innerHTML = `<option value="0">Auto (równo na wszystkie proxy)</option>` +
-      listaProxy.map(p => `<option value="${p.nr}">Proxy #${p.nr} (${p.host}:${p.port})</option>`).join('');
-    selPr.value = staryWybor || '0';
+    if (document.activeElement !== selPr) {
+      const nowySelHtml = `<option value="0">Auto (równo na wszystkie proxy)</option>` +
+        listaProxy.map(p => `<option value="${p.nr}">Proxy #${p.nr} (${p.host}:${p.port})</option>`).join('');
+      if (selPr._poprzedniHtml !== nowySelHtml) {
+        const staryWybor = selPr.value;
+        selPr._poprzedniHtml = nowySelHtml;
+        selPr.innerHTML = nowySelHtml;
+        selPr.value = staryWybor || '0';
+      }
+    }
 
     // Karty Proxy
     const kontenerProxy = document.getElementById('kontenerKartProxy');
-    if (listaProxy.length === 0) {
-      kontenerProxy.innerHTML = `<div style="grid-column:1/-1;padding:12px;text-align:center;color:#ffc93c;font-size:13px">Brak serwerów Proxy SOCKS5. Wklej swoje proxy w polu powyżej i kliknij „+ Dodaj Proxy do puli".</div>`;
-    } else {
-      kontenerProxy.innerHTML = listaProxy.map(p => {
-        const t = p.test;
-        const krKolor = !t ? '#4a5568' : t.ok ? ZIELONY : CZERWONY;
-        const tOpis = !t ? 'nie testowane' : t.ok ? `✓ ${t.ms} ms` : `✗ ${t.powod}`;
-        return `
-          <div style="background:#121824;border:1px solid #1f293d;border-radius:13px;padding:12px 14px;display:flex;flex-direction:column;gap:7px">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <span style="display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:13px">
-                <span style="width:8px;height:8px;border-radius:999px;background:${krKolor}"></span>${p.nazwa}
-              </span>
-              <span style="font-size:11px;color:${krKolor};font-weight:700">${tOpis}</span>
-            </div>
-            <div class="mono" style="font-size:11px;color:#8b98ad;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.host}:${p.port}${p.user ? ' · ' + p.user : ''}</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
-              <span style="font-size:11px;color:#6c7a91">Przypisanych botów: <b style="color:#e6edf7">${p.kont}</b></span>
-              <div style="display:flex;gap:5px">
-                <button type="button" onclick="akcja('/api/proxy-test?nr=${p.nr}')" style="background:#192233;border:none;border-radius:999px;color:#9aa7bd;padding:4px 10px;font-size:11px;font-weight:700">Testuj</button>
-                <button type="button" onclick="akcja('/api/proxy-usun?nr=${p.nr}')" style="background:#192233;border:none;border-radius:999px;color:#ff5c5c;padding:4px 10px;font-size:11px;font-weight:700">Usuń</button>
+    const nowyProxyHtml = listaProxy.length === 0
+      ? `<div style="grid-column:1/-1;padding:12px;text-align:center;color:#ffc93c;font-size:13px">Brak serwerów Proxy SOCKS5. Wklej swoje proxy w polu powyżej i kliknij „+ Dodaj Proxy do puli".</div>`
+      : listaProxy.map(p => {
+          const t = p.test;
+          const krKolor = !t ? '#4a5568' : t.ok ? ZIELONY : CZERWONY;
+          const tOpis = !t ? 'nie testowane' : t.ok ? `✓ ${t.ms} ms` : `✗ ${t.powod}`;
+          return `
+            <div style="background:#121824;border:1px solid #1f293d;border-radius:13px;padding:12px 14px;display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:13px">
+                  <span style="width:8px;height:8px;border-radius:999px;background:${krKolor}"></span>${p.nazwa}
+                </span>
+                <span style="font-size:11px;color:${krKolor};font-weight:700">${tOpis}</span>
+              </div>
+              <div class="mono" style="font-size:11px;color:#8b98ad;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.host}:${p.port}${p.user ? ' · ' + p.user : ''}</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
+                <span style="font-size:11px;color:#6c7a91">Przypisanych botów: <b style="color:#e6edf7">${p.kont}</b></span>
+                <div style="display:flex;gap:5px">
+                  <button type="button" onclick="akcja('/api/proxy-test?nr=${p.nr}')" style="background:#192233;border:none;border-radius:999px;color:#9aa7bd;padding:4px 10px;font-size:11px;font-weight:700">Testuj</button>
+                  <button type="button" onclick="akcja('/api/proxy-usun?nr=${p.nr}')" style="background:#192233;border:none;border-radius:999px;color:#ff5c5c;padding:4px 10px;font-size:11px;font-weight:700">Usuń</button>
+                </div>
               </div>
             </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+    if (kontenerProxy._poprzedniHtml !== nowyProxyHtml) {
+      kontenerProxy._poprzedniHtml = nowyProxyHtml;
+      kontenerProxy.innerHTML = nowyProxyHtml;
     }
 
-    // Tabela 100 Botów
+    // Tabela 100 Botów (aktualizuj tylko gdy stan uległ zmianie)
     const boty = d.boty || [];
     document.getElementById('licznikTabeliBotow').textContent = `${odebrano} / ${boty.length} odebrano w tym cyklu`;
     const tbody = document.getElementById('tabelaNagrodyBody');
-
-    tbody.innerHTML = boty.map(b => {
+    const nowyTbodyHtml = boty.map(b => {
       let badgeKolor = '#252f42', badgeTekstKolor = '#9aa7bd', etykieta = 'Oczekuje';
       if (b.stan === 'w grze') {
         badgeKolor = POMARANCZ; badgeTekstKolor = '#090b10'; etykieta = '▶ W GRZE (ODBIERA)';
@@ -785,27 +798,35 @@
         </tr>
       `;
     }).join('');
+    if (tbody._poprzedniHtml !== nowyTbodyHtml) {
+      tbody._poprzedniHtml = nowyTbodyHtml;
+      tbody.innerHTML = nowyTbodyHtml;
+    }
 
     // Logi
     if (!pauzaLogow) {
       const logBox = document.getElementById('kontenerLogow');
-      const bylNaDole = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 60;
       const linie = (d.dziennik || []).slice(-140);
-      logBox.innerHTML = linie.map(l => {
-        const m = /^\[(\d\d:\d\d:\d\d)\]\s?([\s\S]*)$/.exec(l) || [null, '', l];
-        const t = m[2];
-        let kolor = '#28344b', tekstKolor = '#9aa7bd', tlo = 'transparent';
-        if (/✅|🎁|🔑|🏁/.test(t)) { kolor = ZIELONY; tekstKolor = '#d1fae5'; tlo = 'rgba(53,208,127,.06)'; }
-        else if (/✗|❌|KICK|Błąd/.test(t)) { kolor = CZERWONY; tekstKolor = '#fecaca'; tlo = 'rgba(255,92,92,.07)'; }
-        else if (/🚀|💬|🔐|⏰/.test(t)) { kolor = POMARANCZ; tekstKolor = '#fde68a'; }
-        return `
-          <div style="display:flex;gap:8px;padding:3px 14px;margin:1px 10px;border-radius:7px;border-left:3px solid ${kolor};background:${tlo}">
-            <span style="color:#4a5568;flex:0 0 auto">${m[1]}</span>
-            <span style="color:${tekstKolor};word-break:break-word">${t}</span>
-          </div>
-        `;
-      }).join('');
-      if (bylNaDole) logBox.scrollTop = logBox.scrollHeight;
+      const kluczLogow = linie.length + '|' + (linie[0] || '') + '|' + (linie[linie.length - 1] || '');
+      if (logBox._kluczLogow !== kluczLogow) {
+        logBox._kluczLogow = kluczLogow;
+        const bylNaDole = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 60;
+        logBox.innerHTML = linie.map(l => {
+          const m = /^\[(\d\d:\d\d:\d\d)\]\s?([\s\S]*)$/.exec(l) || [null, '', l];
+          const t = m[2];
+          let kolor = '#28344b', tekstKolor = '#9aa7bd', tlo = 'transparent';
+          if (/✅|🎁|🔑|🏁/.test(t)) { kolor = ZIELONY; tekstKolor = '#d1fae5'; tlo = 'rgba(53,208,127,.06)'; }
+          else if (/✗|❌|KICK|Błąd/.test(t)) { kolor = CZERWONY; tekstKolor = '#fecaca'; tlo = 'rgba(255,92,92,.07)'; }
+          else if (/🚀|💬|🔐|⏰/.test(t)) { kolor = POMARANCZ; tekstKolor = '#fde68a'; }
+          return `
+            <div style="display:flex;gap:8px;padding:3px 14px;margin:1px 10px;border-radius:7px;border-left:3px solid ${kolor};background:${tlo}">
+              <span style="color:#4a5568;flex:0 0 auto">${m[1]}</span>
+              <span style="color:${tekstKolor};word-break:break-word">${t}</span>
+            </div>
+          `;
+        }).join('');
+        if (bylNaDole) logBox.scrollTop = logBox.scrollHeight;
+      }
     }
   }
 </script>

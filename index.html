@@ -472,22 +472,26 @@
       }
 
       const guiEl = document.getElementById('boxOknaGUI');
-      if (d.okno && d.okno.items && d.okno.items.length) {
-        guiEl.innerHTML = `<div style="color:#e6edf7;font-weight:700;margin-bottom:6px">${d.okno.title}</div>` +
+      const nowyGuiHtml = (d.okno && d.okno.items && d.okno.items.length)
+        ? `<div style="color:#e6edf7;font-weight:700;margin-bottom:6px">${d.okno.title}</div>` +
           d.okno.items.map(it =>
             `<button type="button" onclick="klikBota('window',${it.slot})" style="display:block;width:100%;text-align:left;background:#151a23;border:1px solid #232b3a;color:#ffc93c;padding:4px 8px;margin-bottom:4px;font-size:11px">[Slot #${it.slot}] ${it.displayName} ×${it.count}</button>`
-          ).join('');
-      } else {
-        guiEl.textContent = 'Brak otwartego menu GUI';
+          ).join('')
+        : 'Brak otwartego menu GUI';
+      if (guiEl._poprzedni !== nowyGuiHtml) {
+        guiEl._poprzedni = nowyGuiHtml;
+        guiEl.innerHTML = nowyGuiHtml;
       }
 
       const invEl = document.getElementById('boxEkwipunku');
-      if (d.ekwipunek && d.ekwipunek.length) {
-        invEl.innerHTML = d.ekwipunek.map(it =>
-          `<div style="padding:2px 0;border-bottom:1px solid #151a23">[#${it.slot}] <span style="color:#e6edf7">${it.displayName}</span> ×${it.count}</div>`
-        ).join('');
-      } else {
-        invEl.textContent = 'Pusty ekwipunek';
+      const nowyInvHtml = (d.ekwipunek && d.ekwipunek.length)
+        ? d.ekwipunek.map(it =>
+            `<div style="padding:2px 0;border-bottom:1px solid #151a23">[#${it.slot}] <span style="color:#e6edf7">${it.displayName}</span> ×${it.count}</div>`
+          ).join('')
+        : 'Pusty ekwipunek';
+      if (invEl._poprzedni !== nowyInvHtml) {
+        invEl._poprzedni = nowyInvHtml;
+        invEl.innerHTML = nowyInvHtml;
       }
 
       // Oficjalna paleta kolorów bazowych mapy Minecraft (ID 0..61)
@@ -512,13 +516,16 @@
 
       window._ostatnieHasloKont = d.hasloKont || 'HasloBotow123!';
 
-      // Renderowanie pełnej ściany map 8x4 (1024x512) z serwera
+      // Renderowanie pełnej ściany map 8x4 (1024x512) z serwera — rysujemy tylko zmienione kafelki!
       const scianaBox = document.getElementById('boxScianyMap');
       if (d.maScianeMap && d.scianaMap) {
         scianaBox.classList.remove('ukryte');
         const cvs = document.getElementById('canvasScianyMap');
         const ctx = cvs.getContext('2d');
+        if (!cvs._cacheKafelkow) cvs._cacheKafelkow = {};
         for (const [klucz, b64] of Object.entries(d.scianaMap)) {
+          if (cvs._cacheKafelkow[klucz] === b64) continue;
+          cvs._cacheKafelkow[klucz] = b64;
           const [colStr, rowStr] = klucz.split('_');
           const col = parseInt(colStr, 10), row = parseInt(rowStr, 10);
           if (isNaN(col) || isNaN(row)) continue;
@@ -636,15 +643,20 @@
     document.getElementById('ekranLogowania').classList.remove('ukryte');
   }
 
+  let trwaPobieranieStanu = false;
   async function pobierzStan() {
+    if (trwaPobieranieStanu || document.hidden) return;
+    trwaPobieranieStanu = true;
     try {
       const r = await fetch('/api/stan', { headers: naglowki() });
       if (r.status === 401) { wyloguj(); return; }
       const d = await r.json();
-      renderuj(d);
+      requestAnimationFrame(() => renderuj(d));
     } catch (e) {
       document.getElementById('kropkaStanu').style.background = CZERWONY;
       document.getElementById('etykietaStanu').textContent = 'brak łączności';
+    } finally {
+      trwaPobieranieStanu = false;
     }
   }
 
@@ -934,62 +946,89 @@
       btnCof.classList.add('ukryte');
     }
 
-    // Karty Proxy SOCKS5
+    // Karty Proxy SOCKS5 (aktualizuj DOM tylko gdy dane się zmieniły)
     const kontenerProxy = document.getElementById('kontenerKartProxy');
     const listaProxy = d.proxyLista || [];
-    if (listaProxy.length === 0) {
-      kontenerProxy.innerHTML = `<div style="grid-column:1/-1;padding:14px;text-align:center;color:#ffc93c;font-size:13px">Brak dodanych proxy SOCKS5 — możesz dodać je przyciskiem „+ Dodaj proxy" powyżej lub testować pojedynczego bota na własnym IP.</div>`;
-    } else {
-      kontenerProxy.innerHTML = listaProxy.map(p => {
-        const t = p.test;
-        const kropka = !t ? '#3a4454' : t.ok ? ZIELONY : CZERWONY;
-        const testTekst = !t ? 'nie testowane' : t.ok ? `✓ ${t.ms} ms` : `✗ ${t.powod}`;
-        const testKolor = !t ? '#5a6678' : t.ok ? ZIELONY : CZERWONY;
-        return `
-          <div style="background:#11151c;border-radius:14px;padding:13px 15px;display:flex;flex-direction:column;gap:8px;border:1px solid #1b2130">
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <span style="display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px">
-                <span style="width:8px;height:8px;border-radius:999px;background:${kropka}"></span>${p.nazwa}
-              </span>
-              <span style="font-size:11px;color:${testKolor}">${testTekst}</span>
+    const nowyHtmlProxy = listaProxy.length === 0
+      ? `<div style="grid-column:1/-1;padding:14px;text-align:center;color:#ffc93c;font-size:13px">Brak dodanych proxy SOCKS5 — możesz dodać je przyciskiem „+ Dodaj proxy" powyżej lub testować pojedynczego bota na własnym IP.</div>`
+      : listaProxy.map(p => {
+          const t = p.test;
+          const kropka = !t ? '#3a4454' : t.ok ? ZIELONY : CZERWONY;
+          const testTekst = !t ? 'nie testowane' : t.ok ? `✓ ${t.ms} ms` : `✗ ${t.powod}`;
+          const testKolor = !t ? '#5a6678' : t.ok ? ZIELONY : CZERWONY;
+          return `
+            <div style="background:#11151c;border-radius:14px;padding:13px 15px;display:flex;flex-direction:column;gap:8px;border:1px solid #1b2130">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px">
+                  <span style="width:8px;height:8px;border-radius:999px;background:${kropka}"></span>${p.nazwa}
+                </span>
+                <span style="font-size:11px;color:${testKolor}">${testTekst}</span>
+              </div>
+              <div class="mono" style="font-size:12px;color:#8b98ad;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.host}:${p.port}${p.user ? ' · ' + p.user : ''}</div>
+              <div style="display:flex;gap:12px;font-size:12px">
+                <span><b>${p.kont}</b> <span style="color:#5a6678">kont</span></span>
+                <span><b>${p.wlaczone}</b> <span style="color:#5a6678">włączonych</span></span>
+                <span><b style="color:#35d07f">${p.wGrze}</b> <span style="color:#5a6678">w grze</span></span>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button type="button" onclick="akcja('/api/proxy-test?nr=${p.nr}')" style="background:#151a23;border:none;border-radius:999px;color:#8b98ad;padding:5px 12px;font-size:11px;font-weight:700">Testuj</button>
+                <button type="button" onclick="akcja('/api/proxy-usun?nr=${p.nr}')" style="background:#151a23;border:none;border-radius:999px;color:#ff5c5c;padding:5px 12px;font-size:11px;font-weight:700">Usuń</button>
+              </div>
             </div>
-            <div class="mono" style="font-size:12px;color:#8b98ad;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.host}:${p.port}${p.user ? ' · ' + p.user : ''}</div>
-            <div style="display:flex;gap:12px;font-size:12px">
-              <span><b>${p.kont}</b> <span style="color:#5a6678">kont</span></span>
-              <span><b>${p.wlaczone}</b> <span style="color:#5a6678">włączonych</span></span>
-              <span><b style="color:#35d07f">${p.wGrze}</b> <span style="color:#5a6678">w grze</span></span>
-            </div>
-            <div style="display:flex;gap:6px">
-              <button type="button" onclick="akcja('/api/proxy-test?nr=${p.nr}')" style="background:#151a23;border:none;border-radius:999px;color:#8b98ad;padding:5px 12px;font-size:11px;font-weight:700">Testuj</button>
-              <button type="button" onclick="akcja('/api/proxy-usun?nr=${p.nr}')" style="background:#151a23;border:none;border-radius:999px;color:#ff5c5c;padding:5px 12px;font-size:11px;font-weight:700">Usuń</button>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+    if (kontenerProxy._poprzedniHtml !== nowyHtmlProxy) {
+      kontenerProxy._poprzedniHtml = nowyHtmlProxy;
+      kontenerProxy.innerHTML = nowyHtmlProxy;
     }
 
-    // Aktualizacja selecta proxy
+    // Aktualizacja selecta proxy (tylko gdy lista się zmieniła i użytkownik go akurat nie rozwija)
     const selProxy = document.getElementById('przNrProxy');
-    const staryWyborProxy = selProxy.value;
-    selProxy.innerHTML = `<option value="0">auto (równo)</option><option value="-1">bez proxy (Twoje IP)</option>` +
-      listaProxy.map(p => `<option value="${p.nr}">Proxy ${p.nr} (${p.host})</option>`).join('');
-    selProxy.value = staryWyborProxy || '0';
+    if (document.activeElement !== selProxy) {
+      const nowySelProxyHtml = `<option value="0">auto (równo)</option><option value="-1">bez proxy (Twoje IP)</option>` +
+        listaProxy.map(p => `<option value="${p.nr}">Proxy ${p.nr} (${p.host})</option>`).join('');
+      if (selProxy._poprzedniHtml !== nowySelProxyHtml) {
+        const staryWyborProxy = selProxy.value;
+        selProxy._poprzedniHtml = nowySelProxyHtml;
+        selProxy.innerHTML = nowySelProxyHtml;
+        selProxy.value = staryWyborProxy || '0';
+      }
+    }
 
-    // Aktualizacja selecta celów komendy
+    // Aktualizacja selecta celów komendy (tylko gdy lista online się zmieniła)
     const selCel = document.getElementById('wyborCeluKomendy');
-    const staryCel = selCel.value;
-    const onlineBoty = (d.boty || []).filter(b => b.online);
-    selCel.innerHTML = `<option value="">→ wszystkie boty (${onlineBoty.length})</option>` +
-      onlineBoty.map(b => `<option value="${b.nick}">${b.nick} (#${b.slot})</option>`).join('');
-    selCel.value = staryCel;
+    if (document.activeElement !== selCel) {
+      const onlineBoty = (d.boty || []).filter(b => b.online);
+      const nowySelCelHtml = `<option value="">→ wszystkie boty (${onlineBoty.length})</option>` +
+        onlineBoty.map(b => `<option value="${b.nick}">${b.nick} (#${b.slot})</option>`).join('');
+      if (selCel._poprzedniHtml !== nowySelCelHtml) {
+        const staryCel = selCel.value;
+        selCel._poprzedniHtml = nowySelCelHtml;
+        selCel.innerHTML = nowySelCelHtml;
+        selCel.value = staryCel;
+      }
+    }
 
-    // Tabela Floty
+    // Tabela Floty — szybkie odświeżanie tylko tych wierszy, które faktycznie zmieniły stan!
     document.getElementById('licznikFloty').textContent = `${d.wszystkich} / ${d.max}`;
     const tbody = document.getElementById('tabelaBotowBody');
     const boty = d.boty || [];
     const oczekujaceSloty = boty.filter(b => b.wlaczony && !b.online && b.stan === 'rozłączony').map(b => b.slot);
+    const kluczListyProxy = listaProxy.map(p => p.nr).join(',');
 
-    tbody.innerHTML = boty.map(b => {
+    // Jeśli liczba wierszy się nie zgadza (np. pierwsze wejście), budujemy szkielet <tr> raz:
+    if (tbody.children.length !== boty.length) {
+      tbody.innerHTML = boty.map(b => `<tr id="wiersz-slot-${b.slot}"></tr>`).join('');
+    }
+
+    for (let idx = 0; idx < boty.length; idx++) {
+      const b = boty[idx];
+      const tr = tbody.children[idx];
+      if (!tr) continue;
+
+      // Nie przebudowuj wiersza, jeśli użytkownik ma w nim rozwiniętą listę <select>
+      if (document.activeElement && tr.contains(document.activeElement)) continue;
+
       const czekaIdx = oczekujaceSloty.indexOf(b.slot);
       const czyCzeka = czekaIdx !== -1;
       let etykietaStanu = b.stan;
@@ -1012,74 +1051,80 @@
       const czas = b.wlaczony ? czasLudzko(b.czas) : '—';
       const przygas = b.wlaczony ? '1' : '.45';
 
+      const kluczWiersza = `${b.nick}|${b.wlaczony}|${b.online}|${etykietaStanu}|${b.blad || ''}|${b.skryptAktywny}|${b.skryptNazwa}|${poz}|${czas}|${b.proxyReczne}|${b.proxyNr}|${kluczListyProxy}`;
+      if (tr._kluczWiersza === kluczWiersza) continue;
+      tr._kluczWiersza = kluczWiersza;
+
       const opcjeProxySlotu = [
         `<option value="0" ${!b.proxyReczne ? 'selected' : ''}>${b.proxyNr && !b.proxyReczne ? 'auto · P' + b.proxyNr : 'auto'}</option>`,
         `<option value="-1" ${b.proxyReczne && b.proxyNr === -1 ? 'selected' : ''}>bez proxy (Twoje IP)</option>`,
         ...listaProxy.map(p => `<option value="${p.nr}" ${b.proxyReczne && b.proxyNr === p.nr ? 'selected' : ''}>Proxy ${p.nr}</option>`)
       ].join('');
 
-      return `
-        <tr>
-          <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;font-weight:700">
-            <span style="display:inline-flex;align-items:center;gap:9px;opacity:${przygas}">
-              <span style="width:7px;height:7px;border-radius:999px;background:${kolor}"></span>
-              <span style="color:#5a6678;min-width:26px">#${b.slot}</span>${b.nick}
-            </span>
-          </td>
-          <td style="padding:10px 14px;border-bottom:1px solid #151a23">
-            <span style="display:inline-block;padding:3px 11px;border-radius:999px;font-size:11px;font-weight:700;color:#0a0c10;background:${kolor}">${etykietaStanu}</span>
-            ${b.blad ? `<div style="font-size:11px;color:#ff5c5c;margin-top:4px;max-width:220px">${b.blad}</div>` : ''}
-          </td>
-          <td style="padding:10px 14px;border-bottom:1px solid #151a23">
-            <button type="button" onclick="przelaczSkryptSlotu(${b.slot})" ${!b.online ? 'disabled' : ''}
-              style="background:${b.skryptAktywny ? '#35d07f' : '#151a23'};color:${b.skryptAktywny ? '#0a0c10' : '#8b98ad'};border:none;border-radius:999px;padding:5px 12px;font-size:11px;font-weight:800">
-              ${b.skryptAktywny ? '⏹ Zatrzymaj (' + b.skryptNazwa + ')' : '🎃 Odpal skrypt'}
-            </button>
-          </td>
-          <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;color:#8b98ad;font-size:12px;white-space:nowrap">${poz}</td>
-          <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;font-size:12px;white-space:nowrap">${czas}</td>
-          <td style="padding:8px 14px;border-bottom:1px solid #151a23">
-            <select onchange="akcja('/api/konto-proxy?od=${b.slot}&do=${b.slot}&nr=' + this.value)" title="${b.proxy}"
-              style="background:#11151c;border:1px solid ${b.proxyReczne ? '#ff8a3d' : '#232b3a'};color:${b.proxyReczne ? '#ff8a3d' : '#8b98ad'};padding:4px 8px;font-size:12px;border-radius:999px">
-              ${opcjeProxySlotu}
-            </select>
-          </td>
-          <td style="padding:10px 14px;border-bottom:1px solid #151a23;text-align:right;white-space:nowrap">
-            <button type="button" onclick="otworzPodglad3D(${b.slot}, '${b.nick}', true)" ${!b.online ? 'disabled' : ''}
-              title="Podgląd ekranu gry 3D na żywo (#${b.slot})"
-              style="background:#151a23;border:1px solid #232b3a;border-radius:999px;color:#5aa9ff;padding:5px 10px;font-size:11px;font-weight:800;margin-right:6px">
-              👁️ Ekran 3D
-            </button>
-            <button type="button" onclick="akcja('/api/${b.wlaczony ? 'wyjdz' : 'wejdz'}?nick=${b.slot}')"
-              title="${b.wlaczony ? 'Rozłącz #' + b.slot : 'Wpuść #' + b.slot}"
-              style="background:#151a23;border:none;border-radius:999px;color:${b.wlaczony ? '#ff5c5c' : '#35d07f'};width:30px;height:30px;font-size:12px;font-weight:800">
-              ${b.wlaczony ? '✕' : '▶'}
-            </button>
-          </td>
-        </tr>
+      tr.innerHTML = `
+        <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;font-weight:700">
+          <span style="display:inline-flex;align-items:center;gap:9px;opacity:${przygas}">
+            <span style="width:7px;height:7px;border-radius:999px;background:${kolor}"></span>
+            <span style="color:#5a6678;min-width:26px">#${b.slot}</span>${b.nick}
+          </span>
+        </td>
+        <td style="padding:10px 14px;border-bottom:1px solid #151a23">
+          <span style="display:inline-block;padding:3px 11px;border-radius:999px;font-size:11px;font-weight:700;color:#0a0c10;background:${kolor}">${etykietaStanu}</span>
+          ${b.blad ? `<div style="font-size:11px;color:#ff5c5c;margin-top:4px;max-width:220px">${b.blad}</div>` : ''}
+        </td>
+        <td style="padding:10px 14px;border-bottom:1px solid #151a23">
+          <button type="button" onclick="przelaczSkryptSlotu(${b.slot})" ${!b.online ? 'disabled' : ''}
+            style="background:${b.skryptAktywny ? '#35d07f' : '#151a23'};color:${b.skryptAktywny ? '#0a0c10' : '#8b98ad'};border:none;border-radius:999px;padding:5px 12px;font-size:11px;font-weight:800">
+            ${b.skryptAktywny ? '⏹ Zatrzymaj (' + b.skryptNazwa + ')' : '🎃 Odpal skrypt'}
+          </button>
+        </td>
+        <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;color:#8b98ad;font-size:12px;white-space:nowrap">${poz}</td>
+        <td class="mono" style="padding:10px 14px;border-bottom:1px solid #151a23;font-size:12px;white-space:nowrap">${czas}</td>
+        <td style="padding:8px 14px;border-bottom:1px solid #151a23">
+          <select onchange="akcja('/api/konto-proxy?od=${b.slot}&do=${b.slot}&nr=' + this.value)" title="${b.proxy}"
+            style="background:#11151c;border:1px solid ${b.proxyReczne ? '#ff8a3d' : '#232b3a'};color:${b.proxyReczne ? '#ff8a3d' : '#8b98ad'};padding:4px 8px;font-size:12px;border-radius:999px">
+            ${opcjeProxySlotu}
+          </select>
+        </td>
+        <td style="padding:10px 14px;border-bottom:1px solid #151a23;text-align:right;white-space:nowrap">
+          <button type="button" onclick="otworzPodglad3D(${b.slot}, '${b.nick}', true)" ${!b.online ? 'disabled' : ''}
+            title="Podgląd ekranu gry 3D na żywo (#${b.slot})"
+            style="background:#151a23;border:1px solid #232b3a;border-radius:999px;color:#5aa9ff;padding:5px 10px;font-size:11px;font-weight:800;margin-right:6px">
+            👁️ Ekran 3D
+          </button>
+          <button type="button" onclick="akcja('/api/${b.wlaczony ? 'wyjdz' : 'wejdz'}?nick=${b.slot}')"
+            title="${b.wlaczony ? 'Rozłącz #' + b.slot : 'Wpuść #' + b.slot}"
+            style="background:#151a23;border:none;border-radius:999px;color:${b.wlaczony ? '#ff5c5c' : '#35d07f'};width:30px;height:30px;font-size:12px;font-weight:800">
+            ${b.wlaczony ? '✕' : '▶'}
+          </button>
+        </td>
       `;
-    }).join('');
+    }
 
-    // Dziennik logów
+    // Dziennik logów (aktualizuj DOM tylko gdy doszedł nowy wpis!)
     if (!pauzaLogow) {
       const logBox = document.getElementById('kontenerLogow');
-      const bylNaDole = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 60;
       const linie = (d.dziennik || []).slice(-120);
-      logBox.innerHTML = linie.map(l => {
-        const m = /^\[(\d\d:\d\d:\d\d)\]\s?([\s\S]*)$/.exec(l) || [null, '', l];
-        const t = m[2];
-        let kolor = '#2b3444', tekstKolor = '#8b98ad', tlo = 'transparent';
-        if (/✓|✅|na spawnie|🎃/.test(t)) { kolor = ZIELONY; tekstKolor = '#cfe9db'; }
-        else if (/✗|❌|KICK|błąd/.test(t)) { kolor = CZERWONY; tekstKolor = '#ffd0d0'; tlo = 'rgba(255,92,92,.07)'; }
-        else if (/⚠️|↻|wypadł/.test(t)) { kolor = ZOLTY; tekstKolor = '#ffe9b0'; }
-        return `
-          <div style="display:flex;gap:8px;padding:3px 16px 3px 13px;margin:1px 10px;border-radius:8px;border-left:3px solid ${kolor};background:${tlo}">
-            <span style="color:#3f4a5c;flex:0 0 auto">${m[1]}</span>
-            <span style="color:${tekstKolor};word-break:break-word">${t}</span>
-          </div>
-        `;
-      }).join('');
-      if (bylNaDole) logBox.scrollTop = logBox.scrollHeight;
+      const kluczLogow = linie.length + '|' + (linie[0] || '') + '|' + (linie[linie.length - 1] || '');
+      if (logBox._kluczLogow !== kluczLogow) {
+        logBox._kluczLogow = kluczLogow;
+        const bylNaDole = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 60;
+        logBox.innerHTML = linie.map(l => {
+          const m = /^\[(\d\d:\d\d:\d\d)\]\s?([\s\S]*)$/.exec(l) || [null, '', l];
+          const t = m[2];
+          let kolor = '#2b3444', tekstKolor = '#8b98ad', tlo = 'transparent';
+          if (/✓|✅|na spawnie|na trybie|🎃/.test(t)) { kolor = ZIELONY; tekstKolor = '#cfe9db'; }
+          else if (/✗|❌|KICK|błąd/.test(t)) { kolor = CZERWONY; tekstKolor = '#ffd0d0'; tlo = 'rgba(255,92,92,.07)'; }
+          else if (/⚠️|↻|wypadł/.test(t)) { kolor = ZOLTY; tekstKolor = '#ffe9b0'; }
+          return `
+            <div style="display:flex;gap:8px;padding:3px 16px 3px 13px;margin:1px 10px;border-radius:8px;border-left:3px solid ${kolor};background:${tlo}">
+              <span style="color:#3f4a5c;flex:0 0 auto">${m[1]}</span>
+              <span style="color:${tekstKolor};word-break:break-word">${t}</span>
+            </div>
+          `;
+        }).join('');
+        if (bylNaDole) logBox.scrollTop = logBox.scrollHeight;
+      }
     }
   }
 </script>
