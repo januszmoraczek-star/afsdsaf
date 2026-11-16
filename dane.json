@@ -13,137 +13,142 @@
       "nazwa": "Proxy 1",
       "host": "res.proxy-seller.com",
       "port": 10000,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 415,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 2,
       "nazwa": "Proxy 2",
       "host": "res.proxy-seller.com",
       "port": 10001,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 229,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 3,
       "nazwa": "Proxy 3",
       "host": "res.proxy-seller.com",
       "port": 10002,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 212,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 4,
       "nazwa": "Proxy 4",
       "host": "res.proxy-seller.com",
       "port": 10003,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 230,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 5,
       "nazwa": "Proxy 5",
       "host": "res.proxy-seller.com",
       "port": 10004,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 267,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 6,
       "nazwa": "Proxy 6",
       "host": "res.proxy-seller.com",
       "port": 10005,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 223,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 7,
       "nazwa": "Proxy 7",
       "host": "res.proxy-seller.com",
       "port": 10006,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 220,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 8,
       "nazwa": "Proxy 8",
       "host": "res.proxy-seller.com",
       "port": 10007,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 233,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 9,
       "nazwa": "Proxy 9",
       "host": "res.proxy-seller.com",
       "port": 10008,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 222,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     },
     {
       "nr": 10,
       "nazwa": "Proxy 10",
       "host": "res.proxy-seller.com",
       "port": 10009,
-      "user": "282f0cda04e15efc",
-      "pass": "hEFuO6NeC4fMAi0a",
-      "test": {
-        "ok": true,
-        "ms": 261,
-        "powod": ""
-      }
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
+    },
+    {
+      "nr": 11,
+      "nazwa": "Proxy 11",
+      "host": "res.proxy-seller.com",
+      "port": 10010,
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
+    },
+    {
+      "nr": 12,
+      "nazwa": "Proxy 12",
+      "host": "res.proxy-seller.com",
+      "port": 10011,
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
+    },
+    {
+      "nr": 13,
+      "nazwa": "Proxy 13",
+      "host": "res.proxy-seller.com",
+      "port": 10012,
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
+    },
+    {
+      "nr": 14,
+      "nazwa": "Proxy 14",
+      "host": "res.proxy-seller.com",
+      "port": 10013,
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
+    },
+    {
+      "nr": 15,
+      "nazwa": "Proxy 15",
+      "host": "res.proxy-seller.com",
+      "port": 10014,
+      "user": "9f36af867d7b886c",
+      "pass": "q27DRNet6ZTr5b08",
+      "test": null
     }
   ],
   "sloty": [
     {
       "slot": 1,
       "nick": "Tygrys_PL_3052",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -152,7 +157,7 @@
     {
       "slot": 2,
       "nick": "Wesoly_4744",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -161,7 +166,7 @@
     {
       "slot": 3,
       "nick": "MrKamyk_TV_9557",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -170,7 +175,7 @@
     {
       "slot": 4,
       "nick": "KamilPL_MC_1346",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -179,7 +184,7 @@
     {
       "slot": 5,
       "nick": "SmokMC_Pro_5346",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -188,7 +193,7 @@
     {
       "slot": 6,
       "nick": "WojtekPL_2411",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -197,7 +202,7 @@
     {
       "slot": 7,
       "nick": "MrMati_PvP_1394",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -206,7 +211,7 @@
     {
       "slot": 8,
       "nick": "Kacper_XD_3861",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -215,7 +220,7 @@
     {
       "slot": 9,
       "nick": "Lisek_TV_7514",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -224,7 +229,7 @@
     {
       "slot": 10,
       "nick": "Wesoly_YT_3960",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -233,7 +238,7 @@
     {
       "slot": 11,
       "nick": "xFilip_1113",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -242,7 +247,7 @@
     {
       "slot": 12,
       "nick": "Tomek_PL_1536",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -251,7 +256,7 @@
     {
       "slot": 13,
       "nick": "TomekPL_PvP_8688",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -260,7 +265,7 @@
     {
       "slot": 14,
       "nick": "Patryk_XD_5057",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -269,7 +274,7 @@
     {
       "slot": 15,
       "nick": "DawidMC_PvP_8760",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -278,7 +283,7 @@
     {
       "slot": 16,
       "nick": "Dobry_PL_8791",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -287,7 +292,7 @@
     {
       "slot": 17,
       "nick": "Feniks_MC_2157",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -296,7 +301,7 @@
     {
       "slot": 18,
       "nick": "Zloty_PvP_5010",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -305,7 +310,7 @@
     {
       "slot": 19,
       "nick": "Grom_6175",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -314,7 +319,7 @@
     {
       "slot": 20,
       "nick": "Szybki_2100",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -323,7 +328,7 @@
     {
       "slot": 21,
       "nick": "Golem_MC_6290",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -332,7 +337,7 @@
     {
       "slot": 22,
       "nick": "Dziki_PL_4961",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -341,7 +346,7 @@
     {
       "slot": 23,
       "nick": "Rekin_PL_8597",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -350,7 +355,7 @@
     {
       "slot": 24,
       "nick": "Hubert_PvP_4081",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -359,7 +364,7 @@
     {
       "slot": 25,
       "nick": "KubaMC_MC_6218",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -368,7 +373,7 @@
     {
       "slot": 26,
       "nick": "MrKamyk_XD_5106",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -377,7 +382,7 @@
     {
       "slot": 27,
       "nick": "Wojtek_XD_9952",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -386,7 +391,7 @@
     {
       "slot": 28,
       "nick": "Smok_YT_9456",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -395,7 +400,7 @@
     {
       "slot": 29,
       "nick": "Czarny_XD_7246",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
@@ -404,7 +409,7 @@
     {
       "slot": 30,
       "nick": "Zloty_Pro_3867",
-      "wlaczony": true,
+      "wlaczony": false,
       "proxyReczne": false,
       "proxyNr": 0,
       "skryptNazwa": "dynie",
