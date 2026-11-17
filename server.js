@@ -32,7 +32,7 @@ try {
 const DOMYSLNE_NAGRODY = {
   liczbaBotow: 100,          // 100 botów wchodzących po kolei
   komendaTrybu: '',          // np. "/anarchia" lub "/tryb" po zalogowaniu (puste = używa mcKomendaWejscia lub brak)
-  lobbyKlikSlot: 10,         // kliknięcie slotu #10 (tryb po samej lewej stronie w GUI WYBÓR TRYBU)
+  lobbyKlikSlot: 14,         // kliknięcie slotu #14 (3. ikonka w GUI WYBÓR TRYBU)
   lobbyHotbarSlot: 4,        // 5. slot w ekwipunku na pasku (indeks 4 w 0-8)
   komendaNagrody: '/darmowenagrody',
   trybSlotu: 'auto',         // 'auto' = szuka klucza po prawej stronie (fallback slot 23), 'reczny' = sztywny slot
@@ -464,8 +464,8 @@ function polaczBota(slotObj) {
       if (bot.currentWindow) {
         bot._wybranoTryb = true;
         rt.stan = 'wchodzi na tryb...';
-        log(`🧭 [${slotObj.nick}] Wybrano 5. slot w eq → PPM → kliknięto tryb po lewej stronie (slot #10)`);
-        await bot.clickWindow(10, 0, 0);
+        log(`🧭 [${slotObj.nick}] Wybrano 5. slot w eq → PPM → kliknięto 3. ikonkę trybu (slot #14)`);
+        await bot.clickWindow(14, 0, 0);
       }
     } catch (e) {
       // Ignorujemy ewentualny błąd pakietu podczas przełączania podserwera
@@ -660,14 +660,18 @@ setInterval(() => {
   const odstep = Number(konfig.odstepKolejkiMs) || 15000;
   if (teraz - ostatnieWejscieMs < odstep) return;
 
-  // Szukamy pierwszego włączonego slotu, który jest rozłączony
+  // Szukamy pierwszego włączonego slotu, który jest rozłączony lub miał chwilowy błąd proxy
   const oczekujacy = konfig.sloty.find(s => {
     if (!s.wlaczony) return false;
     const rt = pobierzRuntime(s.slot);
-    return !rt.online && rt.stan === 'rozłączony';
+    return !rt.online && (rt.stan === 'rozłączony' || rt.stan === 'błąd');
   });
 
   if (oczekujacy) {
+    const rtOcz = pobierzRuntime(oczekujacy.slot);
+    if (rtOcz.stan === 'błąd') {
+      oczekujacy._przesuniecieProxy = (oczekujacy._przesuniecieProxy || 0) + 1;
+    }
     ostatnieWejscieMs = teraz;
     polaczBota(oczekujacy);
   }

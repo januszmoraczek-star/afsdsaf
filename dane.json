@@ -1455,7 +1455,7 @@
   "nagrody": {
     "liczbaBotow": 100,
     "komendaTrybu": "",
-    "lobbyKlikSlot": 10,
+    "lobbyKlikSlot": 14,
     "lobbyHotbarSlot": 4,
     "komendaNagrody": "/darmowenagrody",
     "trybSlotu": "auto",
